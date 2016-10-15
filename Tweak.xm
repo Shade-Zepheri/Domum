@@ -1,7 +1,4 @@
-#include <mach/mach.h>
-#include <mach/mach_time.h>
-#include <IOKit/hid/IOHIDEvent.h>
-
+#import "Domum.h"
 static BOOL enabled = YES;
 
 %hook SBLockScreenViewController
@@ -35,6 +32,6 @@ static BOOL enabled = YES;
 	CFRelease(event);
 	event = IOHIDEventCreateKeyboardEvent(kCFAllocatorDefault, *(AbsoluteTime *)&abTime, 0xC, 0x40, YES, 0);
 	[springboard _menuButtonUp:event];
-	CFRelease(event);
+	CFRelease(event); 
 }
 %end
