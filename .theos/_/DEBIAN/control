@@ -1,9 +1,10 @@
 Package: com.shade.domum
 Name: Domum
 Depends: mobilesubstrate, preferenceloader
-Version: 0.0.1
 Architecture: iphoneos-arm
 Description: Virtual Home button everywhere
 Maintainer: Shade Zepheri
 Author: Shade Zepheri
 Section: Tweaks
+Version: 0.0.1-15+debug
+Installed-Size: 256

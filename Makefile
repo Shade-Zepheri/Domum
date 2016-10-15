@@ -2,6 +2,7 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = Domum
 Domum_FILES = Tweak.xm
+Domum_FRAMEWORKS = IOKit
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 
