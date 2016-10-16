@@ -1,6 +1,7 @@
 #include <mach/mach.h>
 #include <mach/mach_time.h>
 #include <IOKit/hid/IOHIDEvent.h>
+#import <UIKit/UIWindow+Private.h>
 #define settingsPath "com.shade.Domum"
 #define prefsChanged "com.shade.domum/ReloadPrefs"
 
