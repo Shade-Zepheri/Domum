@@ -9,10 +9,14 @@ static CGFloat btop = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9
 static void loadPrefs() {
     CFPreferencesAppSynchronize(CFSTR(settingsPath));
     enabled = !CFPreferencesCopyAppValue(CFSTR("Enabled"), CFSTR(settingsPath)) ? YES : [(id)CFBridgingRelease(CFPreferencesCopyAppValue(CFSTR("Enabled"), CFSTR(settingsPath))) boolValue];
+    if(!enabled){
+      [button removeFromSuperview];
+      [view removeFromSuperview];
+    }
 }
 
-%hook SBLockScreenViewController
-- (void)finishUIUnlockFromSource:(int)arg1 {
+%hook SpringBoard
+- (void)applicationDidFinishLaunching:(id)arg1 {
   %orig();
   if (enabled) {
 		window = [[UIWindow alloc] initWithFrame:CGRectMake(bleft,btop,48,48)];
@@ -27,8 +31,8 @@ static void loadPrefs() {
 
 		window.windowLevel = UIWindowLevelAlert + 1.0;
 		[window makeKeyAndVisible];
-		[window addSubview: button];
-		 [window addSubview: view];
+		[window addSubview:button];
+		 [window addSubview:view];
   }
 }
 %new
