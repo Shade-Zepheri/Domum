@@ -1,7 +1,10 @@
 #import "Domum.h"
 static BOOL enabled;
-static CGFloat bleft = ([[UIScreen mainScreen] applicationFrame].size.width/2)-16;
-static CGFloat btop = ([[UIScreen mainScreen] applicationFrame].size.height)*0.93;
+UIWindow *window;
+UIView *view;
+UIButton *button;
+static CGFloat bleft = ([[UIScreen mainScreen] applicationFrame].size.width/2)-24;
+static CGFloat btop = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 
 static void loadPrefs() {
     CFPreferencesAppSynchronize(CFSTR(settingsPath));
@@ -12,14 +15,12 @@ static void loadPrefs() {
 - (void)finishUIUnlockFromSource:(int)arg1 {
   %orig();
   if (enabled) {
-		UIWindow *window = [[UIWindow alloc] initWithFrame:CGRectMake(bleft,btop,32,32)];
-		UIImage *homeImage = [[UIImage imageNamed:@"/Library/PreferenceBundles/domum.bundle/home32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-		UIView *view = [[UIView alloc] initWithFrame: [window frame]];
+		window = [[UIWindow alloc] initWithFrame:CGRectMake(bleft,btop,48,48)];
+		view = [[UIView alloc] initWithFrame: [window frame]];
 
-		UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-		[button setImage:homeImage forState:UIControlStateNormal];
-		button.frame = CGRectMake(0,0,32,32);
-		button.imageView.tintColor = [UIColor blackColor];
+		button = [UIButton buttonWithType:UIButtonTypeCustom];
+		[button setImage:[UIImage imageNamed:@"/Library/PreferenceBundles/domum.bundle/Home.png"] forState:UIControlStateNormal];
+		button.frame = CGRectMake(0,0,48,48);
 		[button addTarget:self
         action:@selector(home)
         forControlEvents:UIControlEventTouchUpInside];

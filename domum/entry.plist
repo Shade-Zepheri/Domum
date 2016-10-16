@@ -5,7 +5,7 @@
 		label = "Domum";
 		key = enabled;
 		default = 1;
-		icon = "/Applications/Preferences.app/icon-table@2x.png";
+		icon = "Domum.png";
 		PostNotification = "com.shade.domum/ReloadPrefs";
 	};
 }
