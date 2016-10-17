@@ -1,6 +1,4 @@
 #import "Main.h"
-#import <libactivator/libactivator.h>
-static BOOL enabled = YES;
 static BOOL inLS = YES;
 UIWindow *window;
 UIButton *button;
@@ -9,14 +7,7 @@ static CGFloat btop = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9
 
 static void loadPrefs(){
 	NSDictionary *DSettings = [NSDictionary dictionaryWithContentsOfFile:prefsPath];
-  enabled = ([DSettings objectForKey:@"enabled"] ? [[DSettings objectForKey:@"enabled"] boolValue] : enabled);
   inLS = ([DSettings objectForKey:@"inls"] ? [[DSettings objectForKey:@"inls"] boolValue] : inLS);
-
-	if(!enabled){
-		[window setHidden:YES];
-	}else{
-		[window setHidden:NO];
-	}
 	if(!inLS){
 		[window _setSecure: NO];
 	}else{
@@ -72,7 +63,26 @@ static void SShide(){
 
 %end
 
+@implementation Domum
+
+- (void)activator:(LAActivator *)activator
+	 receiveEvent:(LAEvent *)event
+  forListenerName:(NSString *)listenerName{
+		if(!window.hidden){
+			[window setHidden:YES];
+		}else{
+			[window setHidden:NO];
+		}
+}
+
+@end
+
+static Domum *domumInstance;
+
 %ctor{
+	domumInstance = [[Domum alloc] init];
+  [[LAActivator sharedInstance] registerListener:domumInstance
+                                         forName:@"Domum"];
   CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)loadPrefs, CFSTR("com.shade.domum/ReloadPrefs"), NULL, CFNotificationSuspensionBehaviorCoalesce);
 	loadPrefs();
 }

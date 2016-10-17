@@ -15,11 +15,11 @@
 			<string>com.shade.domum/ReloadPrefs</string>
 			<key>key</key>
 			<string>inls</string>
-			<key>Label</key>
+			<key>label</key>
 			<string>Show on LockScreen</string>
 		</dict>
 	</array>
 	<key>title</key>
-	<string>Domum</string>
+	<string>Options</string>
 </dict>
 </plist>

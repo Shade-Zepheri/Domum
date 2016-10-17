@@ -6,10 +6,26 @@
 	<array>
 		<dict>
 			<key>cell</key>
-			<string>PSButtonCell</string>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>action</key>
+			<string>openTwitter:</string>
+			<key>label</key>
+			<string>Twitter</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>action</key>
+			<string>emailMe:</string>
+			<key>label</key>
+			<string>Email Support</string>
 		</dict>
 	</array>
 	<key>title</key>
-	<string>Domum</string>
+	<string>About</string>
 </dict>
 </plist>
