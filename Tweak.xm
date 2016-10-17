@@ -70,7 +70,7 @@ static void SShide(){
   forListenerName:(NSString *)listenerName{
 		if(!window.hidden){
 			[window setHidden:YES];
-		}else{
+		}else if (window.hidden){
 			[window setHidden:NO];
 		}
 }
