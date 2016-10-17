@@ -1,7 +1,7 @@
 include $(THEOS)/makefiles/common.mk
 
 BUNDLE_NAME = domum
-domum_FILES = DOMRootListController.m
+domum_FILES = DOMRootListController.m DOMAboutController.m DOMOptionsController.m
 domum_INSTALL_PATH = /Library/PreferenceBundles
 domum_FRAMEWORKS = UIKit
 domum_PRIVATE_FRAMEWORKS = Preferences

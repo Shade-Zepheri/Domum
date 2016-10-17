@@ -7,23 +7,25 @@
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>domum First Page</string>
 		</dict>
 		<dict>
 			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.shade.domum</string>
-			<key>key</key>
-			<string>AwesomeSwitch1</string>
+			<string>PSLinkCell</string>
 			<key>label</key>
-			<string>Awesome Switch 1</string>
+			<string>Options</string>
+			<key>detail</key>
+			<string>DOMOptionsController</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>label</key>
+			<string>About</string>
+			<key>detail</key>
+			<string>DOMAboutController</string>
 		</dict>
 	</array>
 	<key>title</key>
-	<string>domum</string>
+	<string>Domum</string>
 </dict>
 </plist>

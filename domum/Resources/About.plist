@@ -11,21 +11,17 @@
 		<dict>
 			<key>cell</key>
 			<string>PSLinkCell</string>
-			<key>label</key>
-			<string>Options</string>
-			<key>detail</key>
-			<string>DOMOptionsController</string>
+			<key>action</key>
+			<string>openTwitter:</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSLinkCell</string>
-			<key>label</key>
-			<string>About</string>
-			<key>detail</key>
-			<string>DOMAboutController</string>
+			<key>action</key>
+			<string>emailMe:</string>
 		</dict>
 	</array>
 	<key>title</key>
-	<string>Domum</string>
+	<string>About</string>
 </dict>
 </plist>

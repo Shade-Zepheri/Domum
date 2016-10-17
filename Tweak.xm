@@ -1,31 +1,52 @@
-#import "Domum.h"
+#import "Main.h"
+#import <libactivator/libactivator.h>
 static BOOL enabled = YES;
-static BOOL inLS = NO;
+static BOOL inLS = YES;
 UIWindow *window;
 UIButton *button;
 static CGFloat bleft = ([[UIScreen mainScreen] applicationFrame].size.width/2)-24;
 static CGFloat btop = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 
+static void loadPrefs(){
+	NSDictionary *DSettings = [NSDictionary dictionaryWithContentsOfFile:prefsPath];
+  enabled = ([DSettings objectForKey:@"enabled"] ? [[DSettings objectForKey:@"enabled"] boolValue] : enabled);
+  inLS = ([DSettings objectForKey:@"inls"] ? [[DSettings objectForKey:@"inls"] boolValue] : inLS);
+
+	if(!enabled){
+		[window setHidden:YES];
+	}else{
+		[window setHidden:NO];
+	}
+	if(!inLS){
+		[window _setSecure: NO];
+	}else{
+		[window _setSecure: YES];
+	}
+}
+
+static void SShide(){
+	if(!window.hidden){
+		[window setHidden:YES];
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.15 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+		    [window setHidden:NO];
+		});
+	}
+}
+
 %hook SpringBoard
 - (void)applicationDidFinishLaunching:(id)arg1 {
   %orig();
-  if (enabled) {
-		window = [[UIWindow alloc] initWithFrame:CGRectMake(bleft,btop,48,48)];
+	window = [[UIWindow alloc] initWithFrame:CGRectMake(bleft,btop,48,48)];
+  button = [UIButton buttonWithType:UIButtonTypeCustom];
+  [button setImage:[UIImage imageNamed:@"/Library/PreferenceBundles/domum.bundle/Home.png"] forState:UIControlStateNormal];
+  button.frame = CGRectMake(0,0,48,48);
+  [button addTarget:self
+      action:@selector(home)
+      forControlEvents:UIControlEventTouchUpInside];
 
-		button = [UIButton buttonWithType:UIButtonTypeCustom];
-		[button setImage:[UIImage imageNamed:@"/Library/PreferenceBundles/domum.bundle/Home.png"] forState:UIControlStateNormal];
-		button.frame = CGRectMake(0,0,48,48);
-		[button addTarget:self
-        action:@selector(home)
-        forControlEvents:UIControlEventTouchUpInside];
-
-		window.windowLevel = UIWindowLevelAlert + 1.0;
-    if(inLS){
-      [window _setSecure: YES];
-    }
-		[window makeKeyAndVisible];
-		[window addSubview:button];
-  }
+  window.windowLevel = UIWindowLevelAlert + 1.0;
+	[window makeKeyAndVisible];
+  [window addSubview:button];
 }
 %new
 -(void)home {
@@ -39,3 +60,19 @@ static CGFloat btop = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9
 	CFRelease(event);
 }
 %end
+
+%hook SBScreenshotManager
+
+- (void)saveScreenshots {
+	SShide();
+	dispatch_after(0, dispatch_get_main_queue(), ^{
+	  %orig();
+	});
+}
+
+%end
+
+%ctor{
+  CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)loadPrefs, CFSTR("com.shade.domum/ReloadPrefs"), NULL, CFNotificationSuspensionBehaviorCoalesce);
+	loadPrefs();
+}
