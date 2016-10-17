@@ -1,7 +1,7 @@
 Package: com.shade.domum
 Name: Domum
 Depends: mobilesubstrate, preferenceloader, libactivator
-Version: 0.6.1
+Version: 0.7
 Architecture: iphoneos-arm
 Description: Onscreen Home button everywhere
 Maintainer: Shade Zepheri
