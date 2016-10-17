@@ -63,26 +63,52 @@ static void SShide(){
 
 %end
 
-@implementation Domum
+@implementation DomController
 
-- (void)activator:(LAActivator *)activator
-	 receiveEvent:(LAEvent *)event
-  forListenerName:(NSString *)listenerName{
++ (DomController*)sharedInstance {
+	static dispatch_once_t p = 0;
+    __strong static DomController* sharedObject = nil;
+    dispatch_once(&p, ^{
+        sharedObject = [[self alloc] init];
+    });
+    return sharedObject;
+}
+
+- (void)activator:(LAActivator *)activator receiveEvent:(LAEvent *)event {
+	[event setHandled:YES]; // To prevent the default iOS action
+
+	NSString *eventName = [activator assignedListenerNameForEvent:event];
+
+	if ([eventName isEqualToString:@"com.shade.domum-hide"]) {
+		[window setHidden:YES];
+	}
+	else if ([eventName isEqualToString:@"com.shade.domum-show"]) {
+		[window setHidden:YES];
+	}
+	else if ([eventName isEqualToString:@"com.shade.domum-toggle"]) {
 		if(!window.hidden){
 			[window setHidden:YES];
-		}else if (window.hidden){
+		}else{
 			[window setHidden:NO];
 		}
+	}
+	else {
+		[event setHandled:NO];
+	}
 }
 
 @end
 
-static Domum *domumInstance;
-
 %ctor{
-	domumInstance = [[Domum alloc] init];
-  [[LAActivator sharedInstance] registerListener:domumInstance
-                                         forName:@"Domum"];
   CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)loadPrefs, CFSTR("com.shade.domum/ReloadPrefs"), NULL, CFNotificationSuspensionBehaviorCoalesce);
 	loadPrefs();
+	[DomController sharedInstance];
+
+	dlopen("/usr/lib/libactivator.dylib", RTLD_LAZY);
+	Class la = objc_getClass("LAActivator");
+	if (la) {
+		[[la sharedInstance] registerListener:[DomController sharedInstance] forName:@"com.shade.domum-hide"];
+		[[la sharedInstance] registerListener:[DomController sharedInstance] forName:@"com.shade.domum-show"];
+		[[la sharedInstance] registerListener:[DomController sharedInstance] forName:@"com.shade.domum-toggle"];
+	}
 }

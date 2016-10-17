@@ -12,5 +12,6 @@
 
 @end
 
-@interface Domum : NSObject <LAListener>
+@interface DomController : NSObject <LAListener>
++ (DomController*)sharedInstance;
 @end
