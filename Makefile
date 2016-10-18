@@ -1,8 +1,8 @@
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = Domum
-Domum_FILES = Tweak.xm
-Domum_FRAMEWORKS = IOKit
+Domum_FILES = $(wildcard tweak/*.m tweak/*.mm tweak/*.x tweak/*.xm)
+Domum_FRAMEWORKS = UIKit
 Domum_LIBRARIES = activator
 
 include $(THEOS_MAKE_PATH)/tweak.mk
