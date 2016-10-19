@@ -1,5 +1,4 @@
 #import "Domum.h"
-static BOOL inLS = YES;
 DomWindow *window;
 UIButton *button;
 static CGFloat l = ([[UIScreen mainScreen] applicationFrame].size.width/2)-24;
@@ -12,9 +11,18 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 	}
 %end
 
+%hook SBScreenshotManager
+- (void)saveScreenshots {
+	[[DomController sharedInstance] ssHide];
+		dispatch_after(0, dispatch_get_main_queue(), ^{
+		    %orig;
+		});
+}
+%end
+
 @implementation DomWindow
 
--(DomWindow *)init{
+- (DomWindow *)init{
 	if( [[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0f ){
 		self = [super init];
 	}
@@ -25,7 +33,6 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 	if (self) {
 		self.windowLevel = UIWindowLevelAlert + 1.0;
 		self.backgroundColor = [UIColor clearColor];
-		[self _setSecure:inLS];
 		[self makeKeyAndVisible];
 		button = [UIButton buttonWithType:UIButtonTypeCustom];
 		[button setImage:[UIImage imageNamed:@"/Library/PreferenceBundles/domum.bundle/Home.png"] forState:UIControlStateNormal];
@@ -38,11 +45,11 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 	return self;
 }
 
--(void)home{
+- (void)home{
 	[[%c(SBUIController) sharedInstance] clickedMenuButton];
 }
 
--(UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     UIView *hitTestView = [super hitTest:point withEvent:event];
     if (hitTestView == self) {
         hitTestView = nil;
@@ -61,6 +68,30 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
         sharedObject = [[self alloc] init];
     });
     return sharedObject;
+}
+
+- (id)init{
+	if (self = [super init]) {
+		prefs = [[NSUserDefaults alloc] initWithSuiteName:@"com.shade.domum"];
+		[prefs registerDefaults:@{
+			@"inlock": @NO,
+		}];
+	}
+	return self;
+}
+
+- (void)updatePrefs{
+	_inLock = [prefs boolForKey:@"inlock"];
+	[window _setSecure:_inLock];
+}
+
+- (void)ssHide{
+		if(!window.hidden){
+			[window setHidden:YES];
+			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.15 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+			    [window setHidden:NO];
+			});
+		}
 }
 
 - (void)activator:(LAActivator *)activator receiveEvent:(LAEvent *)event {
@@ -88,7 +119,13 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 
 @end
 
+void loadPrefs() {
+	[[DomController sharedInstance] updatePrefs];
+}
+
 %ctor{
+	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)loadPrefs, CFSTR("com.shade.domum/ReloadPrefs"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+	loadPrefs();
 	[DomController sharedInstance];
 
 	dlopen("/usr/lib/libactivator.dylib", RTLD_LAZY);

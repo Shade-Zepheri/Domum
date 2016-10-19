@@ -27,7 +27,7 @@
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), DPost, NULL, NULL, YES);
 }
 
-- (void)openTwitter:(id)sender{
+- (void)twitter{
 	if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tweetbot:"]]){
 		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"tweetbot:///user_profile/ShadeZepheri"]];
 	}else if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"twitterrific:"]]){
@@ -41,8 +41,12 @@
 	}
 }
 
-- (void)emailMe:(id)sender{
+- (void)sendEmail{
 	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"mailto:ziroalpha@gmail.com?subject=Domum"]];
+}
+
+- (void)github {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://github.com/Shade-Zepheri/Domum/tree/master"]];
 }
 
 @end

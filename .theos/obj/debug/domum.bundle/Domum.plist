@@ -7,6 +7,12 @@
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
+			<key>headerCellClass</key>
+			<string>DOMHeaderCell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -26,6 +32,6 @@
 		</dict>
 	</array>
 	<key>title</key>
-	<string>Domum</string>
+	<string></string>
 </dict>
 </plist>

@@ -14,9 +14,51 @@
 			<key>PostNotification</key>
 			<string>com.shade.domum/ReloadPrefs</string>
 			<key>key</key>
-			<string>inls</string>
+			<string>inlock</string>
 			<key>label</key>
 			<string>Show on LockScreen</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Activator Gesture</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>label</key>
+			<string>Show Domum</string>
+			<key>isController</key>
+			<true/>
+			<key>bundle</key>
+			<string>LibActivator</string>
+			<key>activatorListener</key>
+			<string>com.shade.domum-show</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>label</key>
+			<string>Hide Domum</string>
+			<key>isController</key>
+			<true/>
+			<key>bundle</key>
+			<string>LibActivator</string>
+			<key>activatorListener</key>
+			<string>com.shade.domum-hide</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>label</key>
+			<string>Toggle Domum</string>
+			<key>isController</key>
+			<true/>
+			<key>bundle</key>
+			<string>LibActivator</string>
+			<key>activatorListener</key>
+			<string>com.shade.domum-toggle</string>
 		</dict>
 	</array>
 	<key>title</key>
