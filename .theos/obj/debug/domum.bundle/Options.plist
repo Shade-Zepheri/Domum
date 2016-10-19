@@ -60,6 +60,14 @@
 			<key>activatorListener</key>
 			<string>com.shade.domum-toggle</string>
 		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Reset Domum Position</string>
+			<key>action</key>
+			<string>resetPos</string>
+		</dict>
 	</array>
 	<key>title</key>
 	<string>Options</string>

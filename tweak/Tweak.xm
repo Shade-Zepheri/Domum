@@ -41,28 +41,27 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 		button.frame = CGRectMake(l,t,48,48);
 		[button addTarget:self action:@selector(home)
 				forControlEvents:UIControlEventTouchUpInside];
-		[button addTarget:self action:@selector(wasDragged:withEvent:)
-				forControlEvents:UIControlEventTouchDragInside];
+
+		UIPanGestureRecognizer *panRecognizer;
+    panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                            action:@selector(wasDragged:)];
+		panRecognizer.cancelsTouchesInView = YES;
+    [button addGestureRecognizer:panRecognizer];
+
 		[self addSubview:button];
 	}
 	return self;
 }
 
-- (void)home{
-	[[%c(SBUIController) sharedInstance] clickedMenuButton];
+- (void)wasDragged:(UIPanGestureRecognizer *)recognizer {
+    UIButton *button = (UIButton *)recognizer.view;
+    CGPoint translation = [recognizer translationInView:button];
+    button.center = CGPointMake(button.center.x + translation.x, button.center.y + translation.y);
+    [recognizer setTranslation:CGPointZero inView:button];
 }
 
-- (void)wasDragged:(UIButton *)button withEvent:(UIEvent *)event
-{
-	UITouch *touch = [[event touchesForView:button] anyObject];
-
-	CGPoint previousLocation = [touch previousLocationInView:button];
-	CGPoint location = [touch locationInView:button];
-	CGFloat delta_x = location.x - previousLocation.x;
-	CGFloat delta_y = location.y - previousLocation.y;
-
-	button.center = CGPointMake(button.center.x + delta_x,
-		button.center.y + delta_y);
+- (void)home{
+	[[%c(SBUIController) sharedInstance] clickedMenuButton];
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
@@ -124,12 +123,15 @@ static void loadPrefs() {
 	NSDictionary *DSettings = [NSDictionary dictionaryWithContentsOfFile:DomPrefsPath];
 	inLS = ([DSettings objectForKey:@"inls"] ? [[DSettings objectForKey:@"inls"] boolValue] : inLS);
 	[window _setSecure:inLS];
-	NSString *darray = [[array valueForKey:@"coordinates"] componentsJoinedByString:@""];
-	HBLogDebug(darray);
+}
+
+static void resetPos() {
+	button.frame = CGRectMake(l,t,48,48);
 }
 
 %ctor{
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)loadPrefs, CFSTR("com.shade.domum/ReloadPrefs"), NULL, CFNotificationSuspensionBehaviorCoalesce);
+	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)resetPos, CFSTR("com.shade.domum/ResetPos"), NULL, CFNotificationSuspensionBehaviorCoalesce);
 	loadPrefs();
 	[DomController sharedInstance];
 
