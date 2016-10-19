@@ -1,5 +1,7 @@
 #import "DomWindow.h"
 #import <libactivator/libactivator.h>
+#define DomPrefsPath @"/User/Library/Preferences/com.shade.domum.plist"
+
 
 @interface SBUIController
 	+(id)sharedInstance;

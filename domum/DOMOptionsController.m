@@ -11,7 +11,7 @@
 }
 
 -(id) readPreferenceValue:(PSSpecifier*)specifier {
-	NSDictionary *DSettings = [NSDictionary dictionaryWithContentsOfFile:DPrefsPath];
+	NSDictionary *DSettings = [NSDictionary dictionaryWithContentsOfFile:DomPrefsPath];
 	if (!DSettings[specifier.properties[@"key"]]) {
 		return specifier.properties[@"default"];
 	}
@@ -20,9 +20,9 @@
 
 -(void) setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
 	NSMutableDictionary *defaults = [NSMutableDictionary dictionary];
-	[defaults addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:DPrefsPath]];
+	[defaults addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:DomPrefsPath]];
 	[defaults setObject:value forKey:specifier.properties[@"key"]];
-	[defaults writeToFile:DPrefsPath atomically:YES];
+	[defaults writeToFile:DomPrefsPath atomically:YES];
 	CFStringRef DPost = (CFStringRef)specifier.properties[@"PostNotification"];
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), DPost, NULL, NULL, YES);
 }

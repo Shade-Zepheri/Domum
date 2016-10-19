@@ -1,3 +1,4 @@
+#line 1 "tweak/Tweak.xm"
 #import "Domum.h"
 DomWindow *window;
 UIButton *button;
@@ -5,21 +6,46 @@ static BOOL inLS = YES;
 static CGFloat l = ([[UIScreen mainScreen] applicationFrame].size.width/2)-24;
 static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 
-%hook SpringBoard
-	- (void)applicationDidFinishLaunching:(id)arg1 {
-		%orig();
+
+#include <substrate.h>
+#if defined(__clang__)
+#if __has_feature(objc_arc)
+#define _LOGOS_SELF_TYPE_NORMAL __unsafe_unretained
+#define _LOGOS_SELF_TYPE_INIT __attribute__((ns_consumed))
+#define _LOGOS_SELF_CONST const
+#define _LOGOS_RETURN_RETAINED __attribute__((ns_returns_retained))
+#else
+#define _LOGOS_SELF_TYPE_NORMAL
+#define _LOGOS_SELF_TYPE_INIT
+#define _LOGOS_SELF_CONST
+#define _LOGOS_RETURN_RETAINED
+#endif
+#else
+#define _LOGOS_SELF_TYPE_NORMAL
+#define _LOGOS_SELF_TYPE_INIT
+#define _LOGOS_SELF_CONST
+#define _LOGOS_RETURN_RETAINED
+#endif
+
+@class SBUIController; @class SpringBoard; @class SBScreenshotManager; 
+static void (*_logos_orig$_ungrouped$SpringBoard$applicationDidFinishLaunching$)(_LOGOS_SELF_TYPE_NORMAL SpringBoard* _LOGOS_SELF_CONST, SEL, id); static void _logos_method$_ungrouped$SpringBoard$applicationDidFinishLaunching$(_LOGOS_SELF_TYPE_NORMAL SpringBoard* _LOGOS_SELF_CONST, SEL, id); static void (*_logos_orig$_ungrouped$SBScreenshotManager$saveScreenshots)(_LOGOS_SELF_TYPE_NORMAL SBScreenshotManager* _LOGOS_SELF_CONST, SEL); static void _logos_method$_ungrouped$SBScreenshotManager$saveScreenshots(_LOGOS_SELF_TYPE_NORMAL SBScreenshotManager* _LOGOS_SELF_CONST, SEL); 
+static __inline__ __attribute__((always_inline)) __attribute__((unused)) Class _logos_static_class_lookup$SBUIController(void) { static Class _klass; if(!_klass) { _klass = objc_getClass("SBUIController"); } return _klass; }
+#line 8 "tweak/Tweak.xm"
+
+	static void _logos_method$_ungrouped$SpringBoard$applicationDidFinishLaunching$(_LOGOS_SELF_TYPE_NORMAL SpringBoard* _LOGOS_SELF_CONST self, SEL _cmd, id arg1) {
+		_logos_orig$_ungrouped$SpringBoard$applicationDidFinishLaunching$(self, _cmd, arg1);
 		window = [[DomWindow alloc] init];
 	}
-%end
 
-%hook SBScreenshotManager
-- (void)saveScreenshots {
+
+
+static void _logos_method$_ungrouped$SBScreenshotManager$saveScreenshots(_LOGOS_SELF_TYPE_NORMAL SBScreenshotManager* _LOGOS_SELF_CONST self, SEL _cmd) {
 	[[DomController sharedInstance] ssHide];
 		dispatch_after(0, dispatch_get_main_queue(), ^{
-		    %orig;
+		    _logos_orig$_ungrouped$SBScreenshotManager$saveScreenshots(self, _cmd);
 		});
 }
-%end
+
 
 @implementation DomWindow
 
@@ -49,17 +75,20 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 }
 
 - (void)home{
-	[[%c(SBUIController) sharedInstance] clickedMenuButton];
+	[[_logos_static_class_lookup$SBUIController() sharedInstance] clickedMenuButton];
 }
 
-- (void)wasDragged:(UIButton *)button withEvent:(UIEvent *)event
-{
+
+- (void)wasDragged:(UIButton *)button withEvent:(UIEvent *)event {
 	UITouch *touch = [[event touchesForView:button] anyObject];
 
 	CGPoint previousLocation = [touch previousLocationInView:button];
 	CGPoint location = [touch locationInView:button];
 	CGFloat delta_x = location.x - previousLocation.x;
 	CGFloat delta_y = location.y - previousLocation.y;
+
+	NSArray *coordinates = [[NSArray alloc] initWithObjects:[CGPointMake(button.center.x + delta_x,
+		button.center.y + delta_y)],nil];
 
 	button.center = CGPointMake(button.center.x + delta_x,
 		button.center.y + delta_y);
@@ -128,7 +157,7 @@ static void loadPrefs() {
 	HBLogDebug(darray);
 }
 
-%ctor{
+static __attribute__((constructor)) void _logosLocalCtor_25183486(int argc, char **argv, char **envp){
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)loadPrefs, CFSTR("com.shade.domum/ReloadPrefs"), NULL, CFNotificationSuspensionBehaviorCoalesce);
 	loadPrefs();
 	[DomController sharedInstance];
@@ -141,3 +170,6 @@ static void loadPrefs() {
 		[[la sharedInstance] registerListener:[DomController sharedInstance] forName:@"com.shade.domum-toggle"];
 	}
 }
+static __attribute__((constructor)) void _logosLocalInit() {
+{Class _logos_class$_ungrouped$SpringBoard = objc_getClass("SpringBoard"); if (_logos_class$_ungrouped$SpringBoard) {MSHookMessageEx(_logos_class$_ungrouped$SpringBoard, @selector(applicationDidFinishLaunching:), (IMP)&_logos_method$_ungrouped$SpringBoard$applicationDidFinishLaunching$, (IMP*)&_logos_orig$_ungrouped$SpringBoard$applicationDidFinishLaunching$);} else {HBLogError(@"logos: nil class %s", "SpringBoard");}Class _logos_class$_ungrouped$SBScreenshotManager = objc_getClass("SBScreenshotManager"); if (_logos_class$_ungrouped$SBScreenshotManager) {MSHookMessageEx(_logos_class$_ungrouped$SBScreenshotManager, @selector(saveScreenshots), (IMP)&_logos_method$_ungrouped$SBScreenshotManager$saveScreenshots, (IMP*)&_logos_orig$_ungrouped$SBScreenshotManager$saveScreenshots);} else {HBLogError(@"logos: nil class %s", "SBScreenshotManager");}} }
+#line 147 "tweak/Tweak.xm"

@@ -14,7 +14,7 @@
 			<key>PostNotification</key>
 			<string>com.shade.domum/ReloadPrefs</string>
 			<key>key</key>
-			<string>inlock</string>
+			<string>inls</string>
 			<key>label</key>
 			<string>Show on LockScreen</string>
 		</dict>

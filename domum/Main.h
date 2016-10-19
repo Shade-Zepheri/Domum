@@ -1,7 +1,7 @@
 #import <Preferences/PSListController.h>
 #import <Preferences/PSSpecifier.h>
 #import <Preferences/PSTableCell.h>
-#import <Preferences/PSViewController.h>
+#define DomPrefsPath @"/User/Library/Preferences/com.shade.domum.plist"
 
 @interface DOMRootListController : PSListController
 @end
