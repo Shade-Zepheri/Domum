@@ -2,6 +2,7 @@
 DomWindow *window;
 UIButton *button;
 static BOOL inLS = YES;
+static CGFloat opa = 1;
 static CGFloat l = ([[UIScreen mainScreen] applicationFrame].size.width/2)-24;
 static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 
@@ -41,13 +42,11 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 		button.frame = CGRectMake(l,t,48,48);
 		[button addTarget:self action:@selector(home)
 				forControlEvents:UIControlEventTouchUpInside];
-
 		UIPanGestureRecognizer *panRecognizer;
     panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                             action:@selector(wasDragged:)];
 		panRecognizer.cancelsTouchesInView = YES;
     [button addGestureRecognizer:panRecognizer];
-
 		[self addSubview:button];
 	}
 	return self;
@@ -56,7 +55,7 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 - (void)wasDragged:(UIPanGestureRecognizer *)recognizer {
     UIButton *button = (UIButton *)recognizer.view;
     CGPoint translation = [recognizer translationInView:button];
-    button.center = CGPointMake(button.center.x + translation.x, button.center.y + translation.y);
+		button.center = CGPointMake(button.center.x + translation.x, button.center.y + translation.y);
     [recognizer setTranslation:CGPointZero inView:button];
 }
 
@@ -122,7 +121,9 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 static void loadPrefs() {
 	NSDictionary *DSettings = [NSDictionary dictionaryWithContentsOfFile:DomPrefsPath];
 	inLS = ([DSettings objectForKey:@"inls"] ? [[DSettings objectForKey:@"inls"] boolValue] : inLS);
+	opa = ([DSettings objectForKey:@"opacity"] ? [[DSettings objectForKey:@"opacity"] floatValue] : opa);
 	[window _setSecure:inLS];
+	window.alpha = opa;
 }
 
 static void resetPos() {

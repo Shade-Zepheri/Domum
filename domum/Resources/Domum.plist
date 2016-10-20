@@ -16,7 +16,7 @@
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>label</key>
-			<string>Options</string>
+			<string>OPTIONS</string>
 			<key>detail</key>
 			<string>DOMOptionsController</string>
 		</dict>
@@ -24,7 +24,7 @@
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>label</key>
-			<string>About</string>
+			<string>ABOUT</string>
 			<key>detail</key>
 			<string>DOMAboutController</string>
 		</dict>
