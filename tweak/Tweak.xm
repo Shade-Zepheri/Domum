@@ -2,9 +2,11 @@
 DomWindow *window;
 UIButton *button;
 static BOOL inLS = YES;
+static BOOL enableColor = NO;
 static CGFloat opa = 1;
 static CGFloat l = ([[UIScreen mainScreen] applicationFrame].size.width/2)-24;
 static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
+NSDictionary *DSettings = [NSDictionary dictionaryWithContentsOfFile:DomPrefsPath];
 
 %hook SpringBoard
 	- (void)applicationDidFinishLaunching:(id)arg1 {
@@ -35,10 +37,12 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 	if (self) {
 		self.windowLevel = UIWindowLevelAlert + 1.0;
 		self.backgroundColor = [UIColor clearColor];
+		self.clipsToBounds = YES;
 		[self _setSecure:YES];
 		[self makeKeyAndVisible];
 		button = [UIButton buttonWithType:UIButtonTypeCustom];
-		[button setImage:[UIImage imageNamed:@"/Library/PreferenceBundles/domum.bundle/Home.png"] forState:UIControlStateNormal];
+		UIImage *image = [[UIImage imageNamed:@"/Library/PreferenceBundles/domum.bundle/Home.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+		[button setImage:image forState:UIControlStateNormal];
 		button.frame = CGRectMake(l,t,48,48);
 		[button addTarget:self action:@selector(home)
 				forControlEvents:UIControlEventTouchUpInside];
@@ -54,9 +58,27 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 
 - (void)wasDragged:(UIPanGestureRecognizer *)recognizer {
     UIButton *button = (UIButton *)recognizer.view;
-    CGPoint translation = [recognizer translationInView:button];
-		button.center = CGPointMake(button.center.x + translation.x, button.center.y + translation.y);
-    [recognizer setTranslation:CGPointZero inView:button];
+		CGPoint translation = [recognizer translationInView:button];
+    CGRect recognizerFrame = recognizer.view.frame;
+    recognizerFrame.origin.x += translation.x;
+    recognizerFrame.origin.y += translation.y;
+		if (CGRectContainsRect(window.bounds, recognizerFrame)) {
+		        recognizer.view.frame = recognizerFrame;
+		    }
+		    else {
+		        if (recognizerFrame.origin.y < window.bounds.origin.y) {
+		            recognizerFrame.origin.y = 0;
+		        }
+		        else if (recognizerFrame.origin.y + recognizerFrame.size.height > window.bounds.size.height) {
+		            recognizerFrame.origin.y = window.bounds.size.height - recognizerFrame.size.height;
+		        }
+		        if (recognizerFrame.origin.x < window.bounds.origin.x) {
+		            recognizerFrame.origin.x = 0;
+		        }
+		        else if (recognizerFrame.origin.x + recognizerFrame.size.width > window.bounds.size.width) {
+		            recognizerFrame.origin.x = window.bounds.size.width - recognizerFrame.size.width;
+		        }
+		    }		[recognizer setTranslation:CGPointZero inView:button];
 }
 
 - (void)home{
@@ -119,11 +141,14 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 @end
 
 static void loadPrefs() {
-	NSDictionary *DSettings = [NSDictionary dictionaryWithContentsOfFile:DomPrefsPath];
 	inLS = ([DSettings objectForKey:@"inls"] ? [[DSettings objectForKey:@"inls"] boolValue] : inLS);
+	enableColor = ([DSettings objectForKey:@"colorenabled"] ? [[DSettings objectForKey:@"colorenabled"] boolValue] : enableColor);
 	opa = ([DSettings objectForKey:@"opacity"] ? [[DSettings objectForKey:@"opacity"] floatValue] : opa);
 	[window _setSecure:inLS];
 	window.alpha = opa;
+	if(enableColor){
+		window.tintColor = (LCPParseColorString([DSettings objectForKey:@"color"], @"#FFFFFF"));
+	}
 }
 
 static void resetPos() {

@@ -27,6 +27,20 @@
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), DPost, NULL, NULL, YES);
 }
 
+- (void)selectColor{
+	NSMutableDictionary *prefsDict = [NSMutableDictionary dictionaryWithContentsOfFile:DomPrefsPath];
+	if (!prefsDict) prefsDict = [NSMutableDictionary dictionary];
+				NSString *fallbackHex = @"#FFFFFF";
+	    UIColor *startColor = LCPParseColorString([prefsDict objectForKey:@"color"], fallbackHex);
+	    PFColorAlert *alert = [PFColorAlert colorAlertWithStartColor:startColor showAlpha:YES];
+	    [alert displayWithCompletion:
+	    ^void (UIColor *pickedColor){
+				NSString *hexString = [UIColor hexFromColor:pickedColor];
+				[prefsDict setObject:hexString forKey:@"color"];
+				[prefsDict writeToFile:DomPrefsPath atomically:YES];
+	    }];
+}
+
 -(void)resetPos{
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.shade.domum/ResetPos"), nil, nil, true);
 }

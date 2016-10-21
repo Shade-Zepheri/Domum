@@ -3,7 +3,7 @@ include $(THEOS)/makefiles/common.mk
 TWEAK_NAME = Domum
 Domum_FILES = $(wildcard tweak/*.m tweak/*.mm tweak/*.x tweak/*.xm)
 Domum_FRAMEWORKS = UIKit
-Domum_LIBRARIES = activator
+Domum_LIBRARIES = activator colorpicker
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 
