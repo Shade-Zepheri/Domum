@@ -1,6 +1,7 @@
 #import "Domum.h"
 DomWindow *window;
 UIButton *button;
+static UIColor *color;
 static BOOL inLS = YES;
 static BOOL enableColor = NO;
 static CGFloat opa = 1;
@@ -50,6 +51,16 @@ NSDictionary *DSettings = [NSDictionary dictionaryWithContentsOfFile:DomPrefsPat
     panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                             action:@selector(wasDragged:)];
 		panRecognizer.cancelsTouchesInView = YES;
+
+		UITapGestureRecognizer *singleTap = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(home)] autorelease];
+		singleTap.numberOfTapsRequired = 1;
+		[button addGestureRecognizer:singleTap];
+
+		UITapGestureRecognizer *doubleTap = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(switcher)] autorelease];
+		doubleTap.numberOfTapsRequired = 2;
+		[button addGestureRecognizer:doubleTap];
+		[singleTap requireGestureRecognizerToFail:doubleTap];
+
     [button addGestureRecognizer:panRecognizer];
 		[self addSubview:button];
 	}
@@ -83,6 +94,10 @@ NSDictionary *DSettings = [NSDictionary dictionaryWithContentsOfFile:DomPrefsPat
 
 - (void)home{
 	[[%c(SBUIController) sharedInstance] clickedMenuButton];
+}
+
+- (void)switcher{
+	[[%c(SBUIController) sharedInstance] handleMenuDoubleTap];
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
@@ -144,10 +159,11 @@ static void loadPrefs() {
 	inLS = ([DSettings objectForKey:@"inls"] ? [[DSettings objectForKey:@"inls"] boolValue] : inLS);
 	enableColor = ([DSettings objectForKey:@"colorenabled"] ? [[DSettings objectForKey:@"colorenabled"] boolValue] : enableColor);
 	opa = ([DSettings objectForKey:@"opacity"] ? [[DSettings objectForKey:@"opacity"] floatValue] : opa);
+	color = (LCPParseColorString([DSettings objectForKey:@"color"], @"#FFFFFF"));
 	[window _setSecure:inLS];
 	window.alpha = opa;
 	if(enableColor){
-		window.tintColor = (LCPParseColorString([DSettings objectForKey:@"color"], @"#FFFFFF"));
+		window.tintColor = color;
 	}
 }
 
