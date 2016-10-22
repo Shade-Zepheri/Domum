@@ -45,8 +45,6 @@ NSDictionary *DSettings = [NSDictionary dictionaryWithContentsOfFile:DomPrefsPat
 		UIImage *image = [[UIImage imageNamed:@"/Library/PreferenceBundles/domum.bundle/Home.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 		[button setImage:image forState:UIControlStateNormal];
 		button.frame = CGRectMake(l,t,48,48);
-		[button addTarget:self action:@selector(home)
-				forControlEvents:UIControlEventTouchUpInside];
 		UIPanGestureRecognizer *panRecognizer;
     panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                             action:@selector(wasDragged:)];
