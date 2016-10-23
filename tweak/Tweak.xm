@@ -1,13 +1,10 @@
 #import "Domum.h"
 DomWindow *window;
 UIButton *button;
-static UIColor *color;
 static BOOL inLS = YES;
-static BOOL enableColor = NO;
 static CGFloat opa = 1;
 static CGFloat l = ([[UIScreen mainScreen] applicationFrame].size.width/2)-24;
 static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
-NSDictionary *DSettings = [NSDictionary dictionaryWithContentsOfFile:DomPrefsPath];
 
 %hook SpringBoard
 	- (void)applicationDidFinishLaunching:(id)arg1 {
@@ -42,7 +39,7 @@ NSDictionary *DSettings = [NSDictionary dictionaryWithContentsOfFile:DomPrefsPat
 		[self _setSecure:YES];
 		[self makeKeyAndVisible];
 		button = [UIButton buttonWithType:UIButtonTypeCustom];
-		UIImage *image = [[UIImage imageNamed:@"/Library/PreferenceBundles/domum.bundle/Home.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+		UIImage *image = [[UIImage imageNamed:@"/Library/PreferenceBundles/domum.bundle/Home.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
 		[button setImage:image forState:UIControlStateNormal];
 		button.frame = CGRectMake(l,t,48,48);
 		UIPanGestureRecognizer *panRecognizer;
@@ -50,11 +47,11 @@ NSDictionary *DSettings = [NSDictionary dictionaryWithContentsOfFile:DomPrefsPat
                                                             action:@selector(wasDragged:)];
 		panRecognizer.cancelsTouchesInView = YES;
 
-		UITapGestureRecognizer *singleTap = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(home)] autorelease];
+		UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(home)];
 		singleTap.numberOfTapsRequired = 1;
 		[button addGestureRecognizer:singleTap];
 
-		UITapGestureRecognizer *doubleTap = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(switcher)] autorelease];
+		UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(switcher)];
 		doubleTap.numberOfTapsRequired = 2;
 		[button addGestureRecognizer:doubleTap];
 		[singleTap requireGestureRecognizerToFail:doubleTap];
@@ -153,16 +150,12 @@ NSDictionary *DSettings = [NSDictionary dictionaryWithContentsOfFile:DomPrefsPat
 
 @end
 
-static void loadPrefs() {
+static void initPrefs() {
+	NSDictionary *DSettings = [NSDictionary dictionaryWithContentsOfFile:DomPrefsPath];
 	inLS = ([DSettings objectForKey:@"inls"] ? [[DSettings objectForKey:@"inls"] boolValue] : inLS);
-	enableColor = ([DSettings objectForKey:@"colorenabled"] ? [[DSettings objectForKey:@"colorenabled"] boolValue] : enableColor);
 	opa = ([DSettings objectForKey:@"opacity"] ? [[DSettings objectForKey:@"opacity"] floatValue] : opa);
-	color = (LCPParseColorString([DSettings objectForKey:@"color"], @"#FFFFFF"));
 	[window _setSecure:inLS];
 	window.alpha = opa;
-	if(enableColor){
-		window.tintColor = color;
-	}
 }
 
 static void resetPos() {
@@ -170,9 +163,9 @@ static void resetPos() {
 }
 
 %ctor{
-	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)loadPrefs, CFSTR("com.shade.domum/ReloadPrefs"), NULL, CFNotificationSuspensionBehaviorCoalesce);
+	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)initPrefs, CFSTR("com.shade.domum/ReloadPrefs"), NULL, CFNotificationSuspensionBehaviorCoalesce);
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)resetPos, CFSTR("com.shade.domum/ResetPos"), NULL, CFNotificationSuspensionBehaviorCoalesce);
-	loadPrefs();
+	initPrefs();
 	[DomController sharedInstance];
 
 	dlopen("/usr/lib/libactivator.dylib", RTLD_LAZY);

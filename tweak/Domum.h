@@ -1,7 +1,6 @@
 #import <UIKit/UIKit.h>
 #import "DomWindow.h"
 #import <libactivator/libactivator.h>
-#import <libcolorpicker.h>
 #define DomPrefsPath @"/User/Library/Preferences/com.shade.domum.plist"
 
 @interface SBUIController
