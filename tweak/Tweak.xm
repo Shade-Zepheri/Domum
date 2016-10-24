@@ -1,6 +1,6 @@
 #import "Domum.h"
 DomWindow *window;
-UIButton *button;
+DomButton *button;
 static BOOL inLS = YES;
 static CGFloat opa = 1;
 static CGFloat l = ([[UIScreen mainScreen] applicationFrame].size.width/2)-24;
@@ -22,48 +22,45 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 }
 %end
 
-@implementation DomWindow
+@implementation DomButton
+//NEVER EVER SUBCLASS UIBUTTON
 
-- (DomWindow *)init{
-	if( [[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0f ){
-		self = [super init];
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+			self = [DomButton buttonWithType:UIButtonTypeCustom];
+			UIImage *image = [[UIImage imageNamed:@"/Library/PreferenceBundles/domum.bundle/Home.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+			[self setImage:image forState:UIControlStateNormal];
+			self.frame = CGRectMake(l,t,48,48);
+			UIPanGestureRecognizer *panRecognizer;
+			panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
+																															action:@selector(wasDragged:)];
+			panRecognizer.cancelsTouchesInView = YES;
+
+			[self addGestureRecognizer:panRecognizer];
+    }
+    return self;
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+	UITouch *touch = [touches anyObject];
+	if (touch.tapCount == 2) {
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	}
-	else {
-		self = [super initWithFrame:[UIScreen mainScreen].bounds];
-	}
+}
 
-	if (self) {
-		self.windowLevel = UIWindowLevelAlert + 1.0;
-		self.backgroundColor = [UIColor clearColor];
-		self.clipsToBounds = YES;
-		[self _setSecure:YES];
-		[self makeKeyAndVisible];
-		button = [UIButton buttonWithType:UIButtonTypeCustom];
-		UIImage *image = [[UIImage imageNamed:@"/Library/PreferenceBundles/domum.bundle/Home.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-		[button setImage:image forState:UIControlStateNormal];
-		button.frame = CGRectMake(l,t,48,48);
-		UIPanGestureRecognizer *panRecognizer;
-    panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                            action:@selector(wasDragged:)];
-		panRecognizer.cancelsTouchesInView = YES;
-
-		UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(home)];
-		singleTap.numberOfTapsRequired = 1;
-		[button addGestureRecognizer:singleTap];
-
-		UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(switcher)];
-		doubleTap.numberOfTapsRequired = 2;
-		[button addGestureRecognizer:doubleTap];
-		[singleTap requireGestureRecognizerToFail:doubleTap];
-
-    [button addGestureRecognizer:panRecognizer];
-		[self addSubview:button];
-	}
-	return self;
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
+	UITouch *touch = [touches anyObject];
+		if (touch.tapCount == 1) {
+			[[%c(SBUIController) sharedInstance] clickedMenuButton];
+		} else if (touch.tapCount == 2) {
+			[[%c(SBUIController) sharedInstance] handleMenuDoubleTap];
+		}
 }
 
 - (void)wasDragged:(UIPanGestureRecognizer *)recognizer {
-    UIButton *button = (UIButton *)recognizer.view;
+    DomButton *button = (DomButton *)recognizer.view;
 		CGPoint translation = [recognizer translationInView:button];
     CGRect recognizerFrame = recognizer.view.frame;
     recognizerFrame.origin.x += translation.x;
@@ -84,15 +81,30 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 		        else if (recognizerFrame.origin.x + recognizerFrame.size.width > window.bounds.size.width) {
 		            recognizerFrame.origin.x = window.bounds.size.width - recognizerFrame.size.width;
 		        }
-		    }		[recognizer setTranslation:CGPointZero inView:button];
+		    }		[recognizer setTranslation:CGPointZero inView:self];
 }
 
-- (void)home{
-	[[%c(SBUIController) sharedInstance] clickedMenuButton];
-}
+@end
 
-- (void)switcher{
-	[[%c(SBUIController) sharedInstance] handleMenuDoubleTap];
+@implementation DomWindow
+
+- (DomWindow *)init{
+	if( [[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0f ){
+		self = [super init];
+	}
+	else {
+		self = [super initWithFrame:[UIScreen mainScreen].bounds];
+	}
+
+	if (self) {
+		self.windowLevel = UIWindowLevelAlert + 1.0;
+		self.backgroundColor = [UIColor clearColor];
+		self.clipsToBounds = YES;
+		[self _setSecure:YES];
+		[self makeKeyAndVisible];
+		[self addSubview:button];
+	}
+	return self;
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
