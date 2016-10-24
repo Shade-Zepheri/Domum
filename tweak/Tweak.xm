@@ -1,6 +1,6 @@
 #import "Domum.h"
 DomWindow *window;
-DomButton *button;
+UIButton *button;
 static BOOL inLS = YES;
 static CGFloat opa = 1;
 static CGFloat l = ([[UIScreen mainScreen] applicationFrame].size.width/2)-24;
@@ -22,27 +22,6 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 }
 %end
 
-@implementation DomButton
-//NEVER SUBCLASS UIBUTTON
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-	UITouch *touch = [touches anyObject];
-	if (touch.tapCount == 2) {
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	}
-}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-	UITouch *touch = [touches anyObject];
-		if (touch.tapCount == 1) {
-			[[%c(SBUIController) sharedInstance] clickedMenuButton];
-		} else if (touch.tapCount == 2) {
-			[[%c(SBUIController) sharedInstance] handleMenuDoubleTap];
-		}
-}
-
-@end
-
 @implementation DomWindow
 
 - (DomWindow *)init{
@@ -59,19 +38,37 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 		self.clipsToBounds = YES;
 		[self _setSecure:YES];
 		[self makeKeyAndVisible];
-		button = [DomButton buttonWithType:UIButtonTypeCustom];
+		button = [UIButton buttonWithType:UIButtonTypeCustom];
 		UIImage *image = [[UIImage imageNamed:@"/Library/PreferenceBundles/domum.bundle/Home.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
 		[button setImage:image forState:UIControlStateNormal];
 		button.frame = CGRectMake(l,t,48,48);
+
 		UIPanGestureRecognizer *panRecognizer;
     panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                             action:@selector(wasDragged:)];
 		panRecognizer.cancelsTouchesInView = YES;
 
+		UILongPressGestureRecognizer *singleTap = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(home)];
+		singleTap.minimumPressDuration = 0.01;
+		[button addGestureRecognizer:singleTap];
+
+		UILongPressGestureRecognizer *doubleTap = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(switcher)];
+		doubleTap.numberOfTapsRequired = 2;
+		[button addGestureRecognizer:doubleTap];	
+		[singleTap requireGestureRecognizerToFail:doubleTap];
+
     [button addGestureRecognizer:panRecognizer];
 		[self addSubview:button];
 	}
 	return self;
+}
+
+- (void)home{
+	[[%c(SBUIController) sharedInstance] clickedMenuButton];
+}
+
+- (void)switcher{
+	[[%c(SBUIController) sharedInstance] handleMenuDoubleTap];
 }
 
 - (void)wasDragged:(UIPanGestureRecognizer *)recognizer {

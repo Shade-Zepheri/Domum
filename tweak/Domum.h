@@ -1,6 +1,5 @@
 #import <UIKit/UIKit.h>
 #import "DomWindow.h"
-#import "DomButton.h"
 #import <libactivator/libactivator.h>
 #define DomPrefsPath @"/User/Library/Preferences/com.shade.domum.plist"
 
@@ -11,7 +10,6 @@
 @end
 
 @interface DomController : NSObject <LAListener>
-@property (nonatomic) BOOL inLock;
 + (DomController*)sharedInstance;
 -(void)ssHide;
 @end
