@@ -23,25 +23,7 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 %end
 
 @implementation DomButton
-//NEVER EVER SUBCLASS UIBUTTON
-
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-			self = [DomButton buttonWithType:UIButtonTypeCustom];
-			UIImage *image = [[UIImage imageNamed:@"/Library/PreferenceBundles/domum.bundle/Home.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-			[self setImage:image forState:UIControlStateNormal];
-			self.frame = CGRectMake(l,t,48,48);
-			UIPanGestureRecognizer *panRecognizer;
-			panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
-																															action:@selector(wasDragged:)];
-			panRecognizer.cancelsTouchesInView = YES;
-
-			[self addGestureRecognizer:panRecognizer];
-    }
-    return self;
-}
+//NEVER SUBCLASS UIBUTTON
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
 	UITouch *touch = [touches anyObject];
@@ -57,31 +39,6 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 		} else if (touch.tapCount == 2) {
 			[[%c(SBUIController) sharedInstance] handleMenuDoubleTap];
 		}
-}
-
-- (void)wasDragged:(UIPanGestureRecognizer *)recognizer {
-    DomButton *button = (DomButton *)recognizer.view;
-		CGPoint translation = [recognizer translationInView:button];
-    CGRect recognizerFrame = recognizer.view.frame;
-    recognizerFrame.origin.x += translation.x;
-    recognizerFrame.origin.y += translation.y;
-		if (CGRectContainsRect(window.bounds, recognizerFrame)) {
-		        recognizer.view.frame = recognizerFrame;
-		    }
-		    else {
-		        if (recognizerFrame.origin.y < window.bounds.origin.y) {
-		            recognizerFrame.origin.y = 0;
-		        }
-		        else if (recognizerFrame.origin.y + recognizerFrame.size.height > window.bounds.size.height) {
-		            recognizerFrame.origin.y = window.bounds.size.height - recognizerFrame.size.height;
-		        }
-		        if (recognizerFrame.origin.x < window.bounds.origin.x) {
-		            recognizerFrame.origin.x = 0;
-		        }
-		        else if (recognizerFrame.origin.x + recognizerFrame.size.width > window.bounds.size.width) {
-		            recognizerFrame.origin.x = window.bounds.size.width - recognizerFrame.size.width;
-		        }
-		    }		[recognizer setTranslation:CGPointZero inView:self];
 }
 
 @end
@@ -102,9 +59,44 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 		self.clipsToBounds = YES;
 		[self _setSecure:YES];
 		[self makeKeyAndVisible];
+		button = [DomButton buttonWithType:UIButtonTypeCustom];
+		UIImage *image = [[UIImage imageNamed:@"/Library/PreferenceBundles/domum.bundle/Home.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+		[button setImage:image forState:UIControlStateNormal];
+		button.frame = CGRectMake(l,t,48,48);
+		UIPanGestureRecognizer *panRecognizer;
+    panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                            action:@selector(wasDragged:)];
+		panRecognizer.cancelsTouchesInView = YES;
+
+    [button addGestureRecognizer:panRecognizer];
 		[self addSubview:button];
 	}
 	return self;
+}
+
+- (void)wasDragged:(UIPanGestureRecognizer *)recognizer {
+    UIButton *button = (UIButton *)recognizer.view;
+		CGPoint translation = [recognizer translationInView:button];
+    CGRect recognizerFrame = recognizer.view.frame;
+    recognizerFrame.origin.x += translation.x;
+    recognizerFrame.origin.y += translation.y;
+		if (CGRectContainsRect(window.bounds, recognizerFrame)) {
+		        recognizer.view.frame = recognizerFrame;
+		    }
+		    else {
+		        if (recognizerFrame.origin.y < window.bounds.origin.y) {
+		            recognizerFrame.origin.y = 0;
+		        }
+		        else if (recognizerFrame.origin.y + recognizerFrame.size.height > window.bounds.size.height) {
+		            recognizerFrame.origin.y = window.bounds.size.height - recognizerFrame.size.height;
+		        }
+		        if (recognizerFrame.origin.x < window.bounds.origin.x) {
+		            recognizerFrame.origin.x = 0;
+		        }
+		        else if (recognizerFrame.origin.x + recognizerFrame.size.width > window.bounds.size.width) {
+		            recognizerFrame.origin.x = window.bounds.size.width - recognizerFrame.size.width;
+		        }
+		    }		[recognizer setTranslation:CGPointZero inView:button];
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
