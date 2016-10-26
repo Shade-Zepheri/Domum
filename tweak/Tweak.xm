@@ -1,6 +1,5 @@
 #import "Domum.h"
 DomWindow *window;
-UIImageView *imageView;
 static BOOL inLS = YES;
 static CGFloat opa = 1;
 static CGFloat l = ([[UIScreen mainScreen] applicationFrame].size.width/2)-24;
@@ -76,7 +75,7 @@ static void initPrefs() {
 }
 
 static void resetPos() {
-	imageView.frame = CGRectMake(l,t,48,48);
+	DomWindow.imageView.frame = CGRectMake(100,100,48,48);
 }
 
 %ctor{

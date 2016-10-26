@@ -12,7 +12,7 @@
 @end
 
 @interface DomWindow : UIWindow
-@property (strong, nonatomic) IBOutlet UIImageView *imageView;
+@property (strong) IBOutlet UIImageView *imageView;
 
 - (void)ivSetup;
 - (void)darkenImage;
