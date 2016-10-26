@@ -68,6 +68,10 @@
 	[self darkenImage];
 }
 
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
+  [self lightenImage];
+}
+
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
 	UITouch *touch = [touches anyObject];
 	float delay = 0.14;

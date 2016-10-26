@@ -15,7 +15,7 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 
 %hook SBScreenshotManager
 - (void)saveScreenshots {
-	[self ssHide];
+	[[DomController sharedInstance] ssHide];
 		dispatch_after(0, dispatch_get_main_queue(), ^{
 		    %orig;
 		});
