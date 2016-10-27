@@ -1,6 +1,8 @@
 #import "DomWindow.h"
 
 static UIImageView *imageView;
+NSBundle *themeAssets;
+NSString *themeBundleName;
 
 @implementation DomWindow
 
@@ -10,7 +12,7 @@ static UIImageView *imageView;
 			self.windowLevel = UIWindowLevelAlert + 1.0;
 			[self _setSecure:YES];
       [self makeKeyAndVisible];
-      UIImage *image = [UIImage imageNamed:@"/Library/PreferenceBundles/domum.bundle/Home.png"];
+      UIImage *image = [UIImage imageWithContentsOfFile:[themeAssets pathForResource:@"home" ofType:@"png"]];
   		imageView = [[UIImageView alloc] initWithFrame:CGRectMake(([[UIScreen mainScreen] applicationFrame].size.width/2)-24,([[UIScreen mainScreen] applicationFrame].size.height)*0.9,48,48)];
   		[imageView setImage:image];
   		[self ivSetup];
@@ -108,8 +110,20 @@ static void resetPos() {
 	imageView.frame = CGRectMake(([[UIScreen mainScreen] applicationFrame].size.width/2)-24,([[UIScreen mainScreen] applicationFrame].size.height)*0.9,48,48);
 }
 
+static void initPrefs() {
+  CFPreferencesAppSynchronize(CFSTR("com.shade.domum"));
+  themeBundleName = !CFPreferencesCopyAppValue(CFSTR("currentTheme"), CFSTR("com.shade.domum")) ? @"Default.bundle" : (__bridge id)CFPreferencesCopyAppValue(CFSTR("currentTheme"), CFSTR("com.shade.domum"));
+  NSURL *bundleURL = [[NSURL alloc] initFileURLWithPath:kBundlePath];
+	themeAssets = nil;
+	themeAssets = [[NSBundle alloc] initWithURL:[bundleURL URLByAppendingPathComponent:themeBundleName]];
+  UIImage *image = [UIImage imageWithContentsOfFile:[themeAssets pathForResource:@"home" ofType:@"png"]];
+  [imageView setImage:image];
+}
+
 %ctor{
   @autoreleasepool{
     CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)resetPos, CFSTR("com.shade.domum/ResetPos"), NULL, CFNotificationSuspensionBehaviorCoalesce);
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)initPrefs, CFSTR("com.shade.domum/ReloadPrefs"), NULL, CFNotificationSuspensionBehaviorCoalesce);
+		initPrefs();
   }
 }
