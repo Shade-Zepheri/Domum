@@ -1,21 +1,22 @@
 #import "DomWindow.h"
 
+static UIImageView *_imageView;
+
 @implementation DomWindow
 
-- (DomWindow *)init {
-	self = [super initWithFrame:[UIScreen mainScreen].bounds];
-
-	if (self) {
-    self.windowLevel = UIWindowLevelAlert + 1.0;
-		[self _setSecure:YES];
-    [self makeKeyAndVisible];
-		UIImage *image = [UIImage imageNamed:@"/Library/PreferenceBundles/domum.bundle/Home.png"];
-		_imageView = [[UIImageView alloc] initWithFrame:CGRectMake(([[UIScreen mainScreen] applicationFrame].size.width/2)-24,([[UIScreen mainScreen] applicationFrame].size.height)*0.9,48,48)];
-		[_imageView setImage:image];
-		[self ivSetup];
-		[self addSubview:_imageView];
-	}
-	return self;
+- (id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+			self.windowLevel = UIWindowLevelAlert + 1.0;
+			[self _setSecure:YES];
+      [self makeKeyAndVisible];
+      UIImage *image = [UIImage imageNamed:@"/Library/PreferenceBundles/domum.bundle/Home.png"];
+  		_imageView = [[UIImageView alloc] initWithFrame:CGRectMake(([[UIScreen mainScreen] applicationFrame].size.width/2)-24,([[UIScreen mainScreen] applicationFrame].size.height)*0.9,48,48)];
+  		[_imageView setImage:image];
+  		[self ivSetup];
+      [self addSubview:_imageView];
+    }
+    return self;
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
@@ -37,7 +38,6 @@
 	panRecognizer.cancelsTouchesInView = YES;
 	[_imageView addGestureRecognizer:panRecognizer];
 }
-
 - (void)wasDragged:(UIPanGestureRecognizer *)recognizer {
     UIImageView *imageView = (UIImageView *)recognizer.view;
 		CGPoint translation = [recognizer translationInView:imageView];
@@ -103,3 +103,13 @@
 }
 
 @end
+
+static void resetPos() {
+	_imageView.frame = CGRectMake(100,100,48,48);
+}
+
+%ctor{
+  @autoreleasepool{
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)resetPos, CFSTR("com.shade.domum/ResetPos"), NULL, CFNotificationSuspensionBehaviorCoalesce);
+  }
+}

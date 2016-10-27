@@ -12,12 +12,4 @@
 @end
 
 @interface DomWindow : UIWindow
-@property (strong) IBOutlet UIImageView *imageView;
-
-- (void)ivSetup;
-- (void)darkenImage;
-- (void)lightenImage;
-- (void)home;
-- (void)switcher;
-
 @end

@@ -1,5 +1,6 @@
 #import "Domum.h"
 DomWindow *window;
+UIImageView *imageView;
 static BOOL inLS = YES;
 static CGFloat opa = 1;
 static CGFloat l = ([[UIScreen mainScreen] applicationFrame].size.width/2)-24;
@@ -8,7 +9,7 @@ static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 %hook SpringBoard
 	- (void)applicationDidFinishLaunching:(id)arg1 {
 		%orig();
-		window = [[DomWindow alloc] init];
+		window = [[DomWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	}
 %end
 
@@ -74,14 +75,9 @@ static void initPrefs() {
 	window.alpha = opa;
 }
 
-static void resetPos() {
-	DomWindow.imageView.frame = CGRectMake(100,100,48,48);
-}
-
 %ctor{
 	@autoreleasepool{
 		CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)initPrefs, CFSTR("com.shade.domum/ReloadPrefs"), NULL, CFNotificationSuspensionBehaviorCoalesce);
-		CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)resetPos, CFSTR("com.shade.domum/ResetPos"), NULL, CFNotificationSuspensionBehaviorCoalesce);
 		initPrefs();
 		[DomController sharedInstance];
 
