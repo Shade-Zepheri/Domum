@@ -1,6 +1,6 @@
 #import "DomWindow.h"
 
-static UIImageView *_imageView;
+static UIImageView *imageView;
 
 @implementation DomWindow
 
@@ -11,10 +11,10 @@ static UIImageView *_imageView;
 			[self _setSecure:YES];
       [self makeKeyAndVisible];
       UIImage *image = [UIImage imageNamed:@"/Library/PreferenceBundles/domum.bundle/Home.png"];
-  		_imageView = [[UIImageView alloc] initWithFrame:CGRectMake(([[UIScreen mainScreen] applicationFrame].size.width/2)-24,([[UIScreen mainScreen] applicationFrame].size.height)*0.9,48,48)];
-  		[_imageView setImage:image];
+  		imageView = [[UIImageView alloc] initWithFrame:CGRectMake(([[UIScreen mainScreen] applicationFrame].size.width/2)-24,([[UIScreen mainScreen] applicationFrame].size.height)*0.9,48,48)];
+  		[imageView setImage:image];
   		[self ivSetup];
-      [self addSubview:_imageView];
+      [self addSubview:imageView];
     }
     return self;
 }
@@ -28,15 +28,15 @@ static UIImageView *_imageView;
 }
 
 - (void)ivSetup{
-	_imageView.layer.cornerRadius = _imageView.frame.size.height /2;
-	_imageView.layer.masksToBounds = YES;
-	_imageView.layer.borderWidth = 0;
-	_imageView.userInteractionEnabled = YES;
+	imageView.layer.cornerRadius = imageView.frame.size.height /2;
+	imageView.layer.masksToBounds = YES;
+	imageView.layer.borderWidth = 0;
+	imageView.userInteractionEnabled = YES;
 	UIPanGestureRecognizer *panRecognizer;
 	panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
 																													action:@selector(wasDragged:)];
 	panRecognizer.cancelsTouchesInView = YES;
-	[_imageView addGestureRecognizer:panRecognizer];
+	[imageView addGestureRecognizer:panRecognizer];
 }
 - (void)wasDragged:(UIPanGestureRecognizer *)recognizer {
     UIImageView *imageView = (UIImageView *)recognizer.view;
@@ -45,23 +45,23 @@ static UIImageView *_imageView;
     recognizerFrame.origin.x += translation.x;
     recognizerFrame.origin.y += translation.y;
     [self lightenImage];
-		if (CGRectContainsRect(_imageView.superview.bounds, recognizerFrame)) {
+		if (CGRectContainsRect(imageView.superview.bounds, recognizerFrame)) {
         recognizer.view.frame = recognizerFrame;
 	  }
     else {
-        if (recognizerFrame.origin.y < _imageView.superview.bounds.origin.y) {
+        if (recognizerFrame.origin.y < imageView.superview.bounds.origin.y) {
             recognizerFrame.origin.y = 0;
         }
-        else if (recognizerFrame.origin.y + recognizerFrame.size.height > _imageView.superview.bounds.size.height) {
-            recognizerFrame.origin.y = _imageView.superview.bounds.size.height - recognizerFrame.size.height;
+        else if (recognizerFrame.origin.y + recognizerFrame.size.height > imageView.superview.bounds.size.height) {
+            recognizerFrame.origin.y = imageView.superview.bounds.size.height - recognizerFrame.size.height;
         }
-        if (recognizerFrame.origin.x < _imageView.superview.bounds.origin.x) {
+        if (recognizerFrame.origin.x < imageView.superview.bounds.origin.x) {
             recognizerFrame.origin.x = 0;
         }
-        else if (recognizerFrame.origin.x + recognizerFrame.size.width > _imageView.superview.bounds.size.width) {
-            recognizerFrame.origin.x = _imageView.superview.bounds.size.width - recognizerFrame.size.width;
+        else if (recognizerFrame.origin.x + recognizerFrame.size.width > imageView.superview.bounds.size.width) {
+            recognizerFrame.origin.x = imageView.superview.bounds.size.width - recognizerFrame.size.width;
         }
-    }		[recognizer setTranslation:CGPointZero inView:_imageView];
+    }		[recognizer setTranslation:CGPointZero inView:imageView];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
@@ -74,7 +74,7 @@ static UIImageView *_imageView;
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
 	UITouch *touch = [touches anyObject];
-	float delay = 0.14;
+	float delay = 0.145;
 	[self lightenImage];
   if (touch.tapCount < 2){
       [self performSelector:@selector(home) withObject:nil afterDelay:delay];
@@ -86,12 +86,12 @@ static UIImageView *_imageView;
 }
 
 - (void)darkenImage{
-	[_imageView.layer setBackgroundColor:[UIColor blackColor].CGColor];
-	[_imageView.layer setOpacity:0.5];
+	[imageView.layer setBackgroundColor:[UIColor blackColor].CGColor];
+	[imageView.layer setOpacity:0.5];
 }
 
 - (void)lightenImage{
-	[_imageView.layer setOpacity:1.0];
+	[imageView.layer setOpacity:1.0];
 }
 
 - (void)home{
@@ -105,7 +105,7 @@ static UIImageView *_imageView;
 @end
 
 static void resetPos() {
-	_imageView.frame = CGRectMake(100,100,48,48);
+	imageView.frame = CGRectMake(([[UIScreen mainScreen] applicationFrame].size.width/2)-24,([[UIScreen mainScreen] applicationFrame].size.height)*0.9,48,48);
 }
 
 %ctor{

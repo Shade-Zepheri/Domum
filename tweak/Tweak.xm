@@ -3,8 +3,6 @@ DomWindow *window;
 UIImageView *imageView;
 static BOOL inLS = YES;
 static CGFloat opa = 1;
-static CGFloat l = ([[UIScreen mainScreen] applicationFrame].size.width/2)-24;
-static CGFloat t = ([[UIScreen mainScreen] applicationFrame].size.height)*0.9;
 
 %hook SpringBoard
 	- (void)applicationDidFinishLaunching:(id)arg1 {
