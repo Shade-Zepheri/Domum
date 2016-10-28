@@ -12,9 +12,6 @@ NSString *themeBundleName;
 			self.windowLevel = UIWindowLevelAlert + 1.0;
 			[self _setSecure:YES];
       [self makeKeyAndVisible];
-      UIImage *image = [UIImage imageWithContentsOfFile:[themeAssets pathForResource:@"home" ofType:@"png"]];
-  		imageView = [[UIImageView alloc] initWithFrame:CGRectMake(([[UIScreen mainScreen] applicationFrame].size.width/2)-24,([[UIScreen mainScreen] applicationFrame].size.height)*0.9,48,48)];
-  		[imageView setImage:image];
   		[self ivSetup];
       [self addSubview:imageView];
     }
@@ -30,9 +27,13 @@ NSString *themeBundleName;
 }
 
 - (void)ivSetup{
-	imageView.layer.cornerRadius = imageView.frame.size.height /2;
-	imageView.layer.masksToBounds = YES;
-	imageView.layer.borderWidth = 0;
+  imageView = [[UIImageView alloc] initWithFrame:CGRectMake(([[UIScreen mainScreen] applicationFrame].size.width/2)-25.5,([[UIScreen mainScreen] applicationFrame].size.height)*0.9,51,51)];
+  UIImage *customImage = [UIImage imageWithContentsOfFile:[themeAssets pathForResource:@"home" ofType:@"png"]];
+  [imageView setImage:customImage];
+  imageView.layer.masksToBounds = YES;
+  imageView.layer.cornerRadius = 25.5;
+  imageView.contentMode = UIViewContentModeScaleAspectFit;
+  imageView.clipsToBounds = YES;
 	imageView.userInteractionEnabled = YES;
 	UIPanGestureRecognizer *panRecognizer;
 	panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
@@ -111,13 +112,13 @@ static void resetPos() {
 }
 
 static void initPrefs() {
-  CFPreferencesAppSynchronize(CFSTR("com.shade.domum"));
-  themeBundleName = !CFPreferencesCopyAppValue(CFSTR("currentTheme"), CFSTR("com.shade.domum")) ? @"Default.bundle" : (__bridge id)CFPreferencesCopyAppValue(CFSTR("currentTheme"), CFSTR("com.shade.domum"));
+  NSDictionary *DSettings = [NSDictionary dictionaryWithContentsOfFile:DomPrefsPath];
+  themeBundleName = [DSettings objectForKey:@"currentTheme"];
   NSURL *bundleURL = [[NSURL alloc] initFileURLWithPath:kBundlePath];
 	themeAssets = nil;
 	themeAssets = [[NSBundle alloc] initWithURL:[bundleURL URLByAppendingPathComponent:themeBundleName]];
-  UIImage *image = [UIImage imageWithContentsOfFile:[themeAssets pathForResource:@"home" ofType:@"png"]];
-  [imageView setImage:image];
+  UIImage *customImage = [UIImage imageWithContentsOfFile:[themeAssets pathForResource:@"home" ofType:@"png"]];
+  [imageView setImage:customImage];
 }
 
 %ctor{

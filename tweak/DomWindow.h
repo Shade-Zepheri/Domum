@@ -1,5 +1,6 @@
 #import <UIKit/UIKit.h>
 #define kBundlePath @"/Library/Application Support/Domum/"
+#define DomPrefsPath @"/User/Library/Preferences/com.shade.domum.plist"
 
 @interface SBUIController
 	+(id)sharedInstance;
