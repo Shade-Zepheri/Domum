@@ -108,7 +108,7 @@ NSString *themeBundleName;
 @end
 
 static void resetPos() {
-	imageView.frame = CGRectMake(([[UIScreen mainScreen] applicationFrame].size.width/2)-24,([[UIScreen mainScreen] applicationFrame].size.height)*0.9,48,48);
+	imageView.frame = CGRectMake(([[UIScreen mainScreen] applicationFrame].size.width/2)-20.5,([[UIScreen mainScreen] applicationFrame].size.height)*0.9,51,51);
 }
 
 static void initPrefs() {
