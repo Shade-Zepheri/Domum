@@ -8,4 +8,6 @@
   OPACITY = "Opacity";
   CHANGE_COLOR = "Change Color";
   COLOR = "Color";
+  SIZE = "Size";
+  THEME = "Theme";
 }

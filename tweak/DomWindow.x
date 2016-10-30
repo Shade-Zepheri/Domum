@@ -1,6 +1,7 @@
 #import "DomWindow.h"
 
 static UIImageView *imageView;
+static CGFloat newSize = 51;
 NSBundle *themeAssets;
 NSString *themeBundleName;
 
@@ -108,17 +109,20 @@ NSString *themeBundleName;
 @end
 
 static void resetPos() {
-	imageView.frame = CGRectMake(([[UIScreen mainScreen] applicationFrame].size.width/2)-20.5,([[UIScreen mainScreen] applicationFrame].size.height)*0.9,51,51);
+  [imageView setCenter:CGPointMake(imageView.superview.bounds.size.width/2, imageView.superview.bounds.size.height*0.93)];
 }
 
 static void initPrefs() {
   NSDictionary *DSettings = [NSDictionary dictionaryWithContentsOfFile:DomPrefsPath];
+  newSize = ([DSettings objectForKey:@"size"] ? [[DSettings objectForKey:@"size"] doubleValue] : newSize);
   themeBundleName = [DSettings objectForKey:@"currentTheme"];
   NSURL *bundleURL = [[NSURL alloc] initFileURLWithPath:kBundlePath];
 	themeAssets = nil;
 	themeAssets = [[NSBundle alloc] initWithURL:[bundleURL URLByAppendingPathComponent:themeBundleName]];
   UIImage *customImage = [UIImage imageWithContentsOfFile:[themeAssets pathForResource:@"home" ofType:@"png"]];
   [imageView setImage:customImage];
+  imageView.frame = CGRectMake(imageView.frame.origin.x,imageView.frame.origin.y,newSize,newSize);
+  imageView.layer.cornerRadius = newSize/2;
 }
 
 %ctor{

@@ -22,6 +22,28 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
+			<string>SIZE</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSliderCell</string>
+			<key>default</key>
+			<real>51</real>
+			<key>defaults</key>
+			<string>com.shade.domum</string>
+			<key>PostNotification</key>
+			<string>com.shade.domum/ReloadPrefs</string>
+			<key>key</key>
+			<string>size</string>
+			<key>min</key>
+			<real>20</real>
+			<key>max</key>
+			<real>100</real>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
 			<string>OPACITY</string>
 		</dict>
 		<dict>
@@ -50,7 +72,7 @@
 			<key>key</key>
 			<string>currentTheme</string>
 			<key>label</key>
-			<string>Theme</string>
+			<string>THEME</string>
 			<key>valuesDataSource</key>
 			<string>themeValues</string>
 			<key>titlesDataSource</key>
