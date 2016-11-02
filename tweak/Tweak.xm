@@ -1,13 +1,14 @@
 #import "Domum.h"
 DomWindow *window;
 UIImageView *imageView;
-static BOOL inLS = YES;
-static CGFloat opa = 1;
+static BOOL inLS;
+static CGFloat opa;
 
 %hook SpringBoard
 	- (void)applicationDidFinishLaunching:(id)arg1 {
 		%orig();
 		window = [[DomWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+		[DomController initPrefs];
 	}
 %end
 
@@ -40,6 +41,14 @@ static CGFloat opa = 1;
 		}
 }
 
++ (void)initPrefs{
+	CFPreferencesAppSynchronize(CFSTR("com.shade.domum"));
+	inLS = !CFPreferencesCopyAppValue(CFSTR("inls"), CFSTR("com.shade.domum")) ? YES : [(__bridge id)CFPreferencesCopyAppValue(CFSTR("inls"), CFSTR("com.shade.domum")) boolValue];
+	opa = !CFPreferencesCopyAppValue(CFSTR("opacity"), CFSTR("com.shade.domum")) ? 1 : [(__bridge id)CFPreferencesCopyAppValue(CFSTR("opacity"), CFSTR("com.shade.domum")) floatValue];
+	[window _setSecure:inLS];
+	window.alpha = opa;
+}
+
 - (void)activator:(LAActivator *)activator receiveEvent:(LAEvent *)event {
 	[event setHandled:YES];
 
@@ -65,18 +74,14 @@ static CGFloat opa = 1;
 
 @end
 
-static void initPrefs() {
-	NSDictionary *DSettings = [NSDictionary dictionaryWithContentsOfFile:DomPrefsPath];
-	inLS = ([DSettings objectForKey:@"inls"] ? [[DSettings objectForKey:@"inls"] boolValue] : inLS);
-	opa = ([DSettings objectForKey:@"opacity"] ? [[DSettings objectForKey:@"opacity"] floatValue] : opa);
-	[window _setSecure:inLS];
-	window.alpha = opa;
+static void loadPrefs() {
+	[DomController initPrefs];
 }
 
 %ctor{
 	@autoreleasepool{
-		CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)initPrefs, CFSTR("com.shade.domum/ReloadPrefs"), NULL, CFNotificationSuspensionBehaviorCoalesce);
-		initPrefs();
+		CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)loadPrefs, CFSTR("com.shade.domum/ReloadPrefs"), NULL, CFNotificationSuspensionBehaviorCoalesce);
+		loadPrefs();
 		[DomController sharedInstance];
 
 		dlopen("/usr/lib/libactivator.dylib", RTLD_LAZY);

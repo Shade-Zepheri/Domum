@@ -1,7 +1,7 @@
 #import "DomWindow.h"
 
 static UIImageView *imageView;
-static CGFloat newSize = 51;
+static CGFloat newSize;
 NSBundle *themeAssets;
 NSString *themeBundleName;
 
@@ -14,6 +14,7 @@ NSString *themeBundleName;
 			[self _setSecure:YES];
       [self makeKeyAndVisible];
   		[self ivSetup];
+      [DomWindow initPrefs];
       [self addSubview:imageView];
     }
     return self;
@@ -25,6 +26,19 @@ NSString *themeBundleName;
         hitTestView = nil;
     }
     return hitTestView;
+}
+
++ (void)initPrefs{
+  CFPreferencesAppSynchronize(CFSTR("com.shade.domum"));
+  newSize = !CFPreferencesCopyAppValue(CFSTR("size"), CFSTR("com.shade.domum")) ? 51 : [(__bridge id)CFPreferencesCopyAppValue(CFSTR("size"), CFSTR("com.shade.domum")) floatValue];
+	themeBundleName = !CFPreferencesCopyAppValue(CFSTR("currentTheme"), CFSTR("com.shade.domum")) ? @"Default.bundle" : (__bridge id)CFPreferencesCopyAppValue(CFSTR("currentTheme"), CFSTR("com.shade.domum"));
+	NSURL *bundleURL = [[NSURL alloc] initFileURLWithPath:kBundlePath];
+	themeAssets = nil;
+	themeAssets = [[NSBundle alloc] initWithURL:[bundleURL URLByAppendingPathComponent:themeBundleName]];
+  UIImage *customImage = [UIImage imageWithContentsOfFile:[themeAssets pathForResource:@"home" ofType:@"png"]];
+  [imageView setImage:customImage];
+  imageView.frame = CGRectMake(imageView.frame.origin.x,imageView.frame.origin.y,newSize,newSize);
+  imageView.layer.cornerRadius = newSize/2;
 }
 
 - (void)ivSetup{
@@ -42,6 +56,7 @@ NSString *themeBundleName;
 	panRecognizer.cancelsTouchesInView = YES;
 	[imageView addGestureRecognizer:panRecognizer];
 }
+
 - (void)wasDragged:(UIPanGestureRecognizer *)recognizer {
     UIImageView *imageView = (UIImageView *)recognizer.view;
 		CGPoint translation = [recognizer translationInView:imageView];
@@ -112,23 +127,14 @@ static void resetPos() {
   [imageView setCenter:CGPointMake(imageView.superview.bounds.size.width/2, imageView.superview.bounds.size.height*0.93)];
 }
 
-static void initPrefs() {
-  NSDictionary *DSettings = [NSDictionary dictionaryWithContentsOfFile:DomPrefsPath];
-  newSize = ([DSettings objectForKey:@"size"] ? [[DSettings objectForKey:@"size"] doubleValue] : newSize);
-  themeBundleName = [DSettings objectForKey:@"currentTheme"];
-  NSURL *bundleURL = [[NSURL alloc] initFileURLWithPath:kBundlePath];
-	themeAssets = nil;
-	themeAssets = [[NSBundle alloc] initWithURL:[bundleURL URLByAppendingPathComponent:themeBundleName]];
-  UIImage *customImage = [UIImage imageWithContentsOfFile:[themeAssets pathForResource:@"home" ofType:@"png"]];
-  [imageView setImage:customImage];
-  imageView.frame = CGRectMake(imageView.frame.origin.x,imageView.frame.origin.y,newSize,newSize);
-  imageView.layer.cornerRadius = newSize/2;
+static void loadPrefs() {
+  [DomWindow initPrefs];
 }
 
 %ctor{
   @autoreleasepool{
     CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)resetPos, CFSTR("com.shade.domum/ResetPos"), NULL, CFNotificationSuspensionBehaviorCoalesce);
-    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)initPrefs, CFSTR("com.shade.domum/ReloadPrefs"), NULL, CFNotificationSuspensionBehaviorCoalesce);
-		initPrefs();
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)loadPrefs, CFSTR("com.shade.domum/ReloadPrefs"), NULL, CFNotificationSuspensionBehaviorCoalesce);
+		loadPrefs();
   }
 }
