@@ -2,8 +2,6 @@
 
 static UIImageView *imageView;
 static CGFloat newSize;
-NSBundle *themeAssets;
-NSString *themeBundleName;
 
 @implementation DomWindow
 
@@ -31,20 +29,14 @@ NSString *themeBundleName;
 + (void)initPrefs{
   CFPreferencesAppSynchronize(CFSTR("com.shade.domum"));
   newSize = !CFPreferencesCopyAppValue(CFSTR("size"), CFSTR("com.shade.domum")) ? 51 : [(__bridge id)CFPreferencesCopyAppValue(CFSTR("size"), CFSTR("com.shade.domum")) floatValue];
-	themeBundleName = !CFPreferencesCopyAppValue(CFSTR("currentTheme"), CFSTR("com.shade.domum")) ? @"Default.bundle" : (__bridge id)CFPreferencesCopyAppValue(CFSTR("currentTheme"), CFSTR("com.shade.domum"));
-	NSURL *bundleURL = [[NSURL alloc] initFileURLWithPath:kBundlePath];
-	themeAssets = nil;
-	themeAssets = [[NSBundle alloc] initWithURL:[bundleURL URLByAppendingPathComponent:themeBundleName]];
-  UIImage *customImage = [UIImage imageWithContentsOfFile:[themeAssets pathForResource:@"home" ofType:@"png"]];
-  [imageView setImage:customImage];
   imageView.frame = CGRectMake(imageView.frame.origin.x,imageView.frame.origin.y,newSize,newSize);
   imageView.layer.cornerRadius = newSize/2;
 }
 
 - (void)ivSetup{
-  imageView = [[UIImageView alloc] initWithFrame:CGRectMake(([[UIScreen mainScreen] applicationFrame].size.width/2)-25.5,([[UIScreen mainScreen] applicationFrame].size.height)*0.9,51,51)];
-  UIImage *customImage = [UIImage imageWithContentsOfFile:[themeAssets pathForResource:@"home" ofType:@"png"]];
-  [imageView setImage:customImage];
+  imageView = [[UIImageView alloc] initWithFrame:CGRectMake(([[UIScreen mainScreen] bounds].size.width/2)-25.5,([[UIScreen mainScreen] bounds].size.height)*0.9,51,51)];
+  UIImage *image = [[UIImage alloc] initWithContentsOfFile:[[NSBundle bundleWithPath:kImagePath] pathForResource:@"home" ofType:@"png"]];
+  [imageView setImage:image];
   imageView.layer.masksToBounds = YES;
   imageView.layer.cornerRadius = 25.5;
   imageView.contentMode = UIViewContentModeScaleAspectFit;

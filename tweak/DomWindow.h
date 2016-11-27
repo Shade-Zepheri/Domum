@@ -1,5 +1,5 @@
 #import <UIKit/UIKit.h>
-#define kBundlePath @"/Library/Application Support/Domum/"
+#define kImagePath @"/Library/Application Support/Domum/"
 
 @interface SBUIController
 	+(id)sharedInstance;
