@@ -82,6 +82,7 @@ static void loadPrefs() {
 	@autoreleasepool{
 		CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)loadPrefs, CFSTR("com.shade.domum/ReloadPrefs"), NULL, CFNotificationSuspensionBehaviorCoalesce);
 		loadPrefs();
+
 		[DomController sharedInstance];
 
 		dlopen("/usr/lib/libactivator.dylib", RTLD_LAZY);
