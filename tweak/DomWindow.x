@@ -85,7 +85,7 @@ static CGFloat newSize;
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
 	UITouch *touch = [touches anyObject];
-	float delay = 0.145;
+	float delay = 0.16;
 	[self lightenImage];
   if (touch.tapCount < 2){
       [self performSelector:@selector(home) withObject:nil afterDelay:delay];
