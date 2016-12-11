@@ -1,2 +1,1 @@
-My Attempt at making a vitrual home button always present
-PLEASE DONT LEARN FROM THIS IT IS PROBABLY MY MOST POORLY WRITTEN TWEAK
+My Attempt at making a vitrual home button always present. Mostly Fixed now so yall can learn for it now
