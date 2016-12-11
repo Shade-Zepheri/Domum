@@ -1,9 +1,14 @@
 #import <UIKit/UIKit.h>
+#import "DomController.h"
 #import "DomWindow.h"
-#import <libactivator/libactivator.h>
 
-@interface DomController : NSObject <LAListener>
-+ (DomController*)sharedInstance;
-+ (void)initPrefs;
-- (void)ssHide;
+@interface SBUIController
+	+(id)sharedInstance;
+	-(void)clickedMenuButton;
+  -(void)handleMenuDoubleTap;
+@end
+
+@interface Domum : NSObject
+@property (nonatomic, strong) UIButton *button;
++ (instancetype)sharedInstance;
 @end

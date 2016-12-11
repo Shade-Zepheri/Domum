@@ -1,11 +1,4 @@
 #import <UIKit/UIKit.h>
-#define kImagePath @"/Library/Application Support/Domum/"
-
-@interface SBUIController
-	+(id)sharedInstance;
-	-(void)clickedMenuButton;
-  -(void)handleMenuDoubleTap;
-@end
 
 @interface UIWindow (Private)
 - (void)_setSecure:(BOOL)secure;
@@ -13,5 +6,4 @@
 @end
 
 @interface DomWindow : UIWindow
-+ (void)initPrefs;
 @end
