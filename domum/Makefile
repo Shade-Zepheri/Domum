@@ -5,6 +5,7 @@ domum_FILES = DOMRootListController.m DOMAboutController.m DOMOptionsController.
 domum_INSTALL_PATH = /Library/PreferenceBundles
 domum_FRAMEWORKS = UIKit
 domum_PRIVATE_FRAMEWORKS = Preferences
+domum_CFLAGS = -Wno-deprecated-declarations -fobjc-arc
 
 include $(THEOS_MAKE_PATH)/bundle.mk
 

@@ -4,9 +4,8 @@
 
 - (NSArray *)specifiers {
 	if (!_specifiers) {
-		_specifiers = [[self loadSpecifiersFromPlistName:@"Domum" target:self] retain];
+		_specifiers = [self loadSpecifiersFromPlistName:@"Domum" target:self];
 	}
-
 	return _specifiers;
 }
 
@@ -38,13 +37,16 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	self.navigationController.navigationController.navigationBar.tintColor = DarkGrayColor;
-	self.navigationController.navigationController.navigationBar.barTintColor = GrayColor;
+	self.navigationController.navigationController.navigationBar.tintColor = GrayColor;
+	self.navigationController.navigationController.navigationBar.barTintColor = DarkGrayColor;
 	self.navigationController.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
 
 	[UISlider appearanceWhenContainedInInstancesOfClasses:@[[self class]]].tintColor = GrayColor;
 	[UISwitch appearanceWhenContainedInInstancesOfClasses:@[[self class]]].onTintColor = GrayColor;
 	[UISegmentedControl appearanceWhenContainedInInstancesOfClasses:@[[self class]]].tintColor = GrayColor;
+
+	prevStatusStyle = [[UIApplication sharedApplication] statusBarStyle];
+	[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -52,6 +54,9 @@
 	self.navigationController.navigationController.navigationBar.tintColor = nil;
 	self.navigationController.navigationController.navigationBar.barTintColor = nil;
 	self.navigationController.navigationController.navigationBar.titleTextAttributes = nil;
+
+	[[UIApplication sharedApplication] setStatusBarStyle:prevStatusStyle];
+	prevStatusStyle = [[UIApplication sharedApplication] statusBarStyle];
 }
 
 @end

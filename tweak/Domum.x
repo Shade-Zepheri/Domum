@@ -17,7 +17,8 @@
     _button = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:[[NSBundle bundleWithPath:@"/Library/Application Support/Domum"] pathForResource:@"home" ofType:@"png"]];
     [_button setBackgroundImage:image forState:UIControlStateNormal];
-    _button.frame = CGRectMake(([[UIScreen mainScreen] bounds].size.width/2)-25.5,([[UIScreen mainScreen] bounds].size.height)*0.9,[DomSettings sharedSettings].size,[DomSettings sharedSettings].size);
+    _button.frame = CGRectMake(0,0,[DomSettings sharedSettings].size,[DomSettings sharedSettings].size);
+    [_button setCenter:CGPointMake([[UIScreen mainScreen] bounds].size.width/2, [[UIScreen mainScreen] bounds].size.height*0.93)];
     _button.alpha = [DomSettings sharedSettings].opacity;
     UIPanGestureRecognizer *panRecognizer;
     panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
@@ -68,4 +69,5 @@
 - (void)switcher {
   [[%c(SBUIController) sharedInstance] handleMenuDoubleTap];
 }
+
 @end

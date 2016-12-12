@@ -23,13 +23,15 @@ UIButton *button;
 %end
 
 void prefsChanged() {
-	button.alpha = [DomSettings sharedSettings].opacity;
-	button.frame = CGRectMake(button.frame.origin.x,button.frame.origin.y,[DomSettings sharedSettings].size,[DomSettings sharedSettings].size);
-	[window _setSecure:[DomSettings sharedSettings].inLockScreen];
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.2f * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+		button.alpha = [DomSettings sharedSettings].opacity;
+		button.frame = CGRectMake(button.frame.origin.x,button.frame.origin.y,[DomSettings sharedSettings].size,[DomSettings sharedSettings].size);
+		[window _setSecure:[DomSettings sharedSettings].inLockScreen];
+  });
 }
 
 void resetPosition() {
-	 [button setCenter:CGPointMake(button.superview.bounds.size.width/2, button.superview.bounds.size.height*0.93)];
+	[button setCenter:CGPointMake(button.superview.bounds.size.width/2, button.superview.bounds.size.height*0.93)];
 }
 
 %ctor{
@@ -39,7 +41,7 @@ void resetPosition() {
 														(CFNotificationCallback)prefsChanged,
 														CFSTR("com.shade.domum/ReloadPrefs"),
 														NULL,
-														CFNotificationSuspensionBehaviorDeliverImmediately);
+														CFNotificationSuspensionBehaviorCoalesce);
 		CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
 														NULL,
 														(CFNotificationCallback)resetPosition,
