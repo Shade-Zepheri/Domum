@@ -50,8 +50,8 @@
     if (!_settings) {
       HBLogError(@"[ReachApp] could not load settings from CFPreferences or NSDictionary");
     }
-    [Domum sharedInstance].button.alpha = [self opacity];
-		[Domum sharedInstance].button.frame = CGRectMake(CGRectGetMinX([Domum sharedInstance].button.frame), CGRectGetMinY([Domum sharedInstance].button.frame), [self size], [self size]);
+    [Domum sharedInstance].alpha = [self opacity];
+		[Domum sharedInstance].frame = CGRectMake(CGRectGetMinX([Domum sharedInstance].frame), CGRectGetMinY([Domum sharedInstance].frame), [self size], [self size]);
 		[[DomWindow sharedInstance] setShowOnLockScreen:[self inLockScreen]];
   }
 }

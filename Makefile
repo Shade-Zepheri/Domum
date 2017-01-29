@@ -4,7 +4,7 @@ TARGET = iphone:9.2
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = Domum
-Domum_FILES = $(wildcard tweak/*.m tweak/*.x tweak/*.xm)
+Domum_FILES = $(wildcard *.m *.x *.xm)
 Domum_FRAMEWORKS = UIKit
 
 include $(THEOS_MAKE_PATH)/tweak.mk

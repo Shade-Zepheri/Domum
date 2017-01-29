@@ -1,18 +1,12 @@
-#import "DomController.h"
 #import "DomWindow.h"
-#import <objc/runtime.h>
+#import <libactivator/libactivator.h>
+
+@interface DomController : NSObject <LAListener>
+@end
+
+static DOMActivatorListener *sharedInstance;
 
 @implementation DomController
-
-+ (DomController*)sharedInstance {
-	static dispatch_once_t p = 0;
-    __strong static DomController* sharedObject = nil;
-    dispatch_once(&p, ^{
-        sharedObject = [[self alloc] init];
-    });
-    return sharedObject;
-}
-
 - (void)activator:(LAActivator *)activator receiveEvent:(LAEvent *)event {
 	[event setHandled:YES];
 
@@ -34,3 +28,10 @@
 }
 
 @end
+
+%ctor {
+		sharedInstance = [[RAActivatorListener alloc] init];
+  	[[%c(LAActivator) sharedInstance] registerListener:sharedInstance forName:@"com.shade.domum-hide"];
+		[[%c(LAActivator) sharedInstance] registerListener:sharedInstance forName:@"com.shade.domum-show"];
+		[[%c(LAActivator) sharedInstance] registerListener:sharedInstance forName:@"com.shade.domum-toggle"];
+}
