@@ -1,11 +1,11 @@
-TARGET = iphone:clang:9.3:9.3
+CFLAGS = -fobjc-arc -O2
+TARGET = iphone:9.2
 
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = Domum
 Domum_FILES = $(wildcard tweak/*.m tweak/*.x tweak/*.xm)
 Domum_FRAMEWORKS = UIKit
-Domum_CFLAGS = -fobjc-arc -O2
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 

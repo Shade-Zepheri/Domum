@@ -1,4 +1,5 @@
 #import "DomController.h"
+#import "DomWindow.h"
 #import <objc/runtime.h>
 
 @implementation DomController
@@ -12,37 +13,24 @@
     return sharedObject;
 }
 
-- (DomWindow*)window {
-	static DomWindow* dimWindow = nil;
-	if (!dimWindow) {
-		dimWindow = [[DomWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-	}
-	return dimWindow;
-}
-
 - (void)activator:(LAActivator *)activator receiveEvent:(LAEvent *)event {
 	[event setHandled:YES];
 
 	NSString *eventName = [activator assignedListenerNameForEvent:event];
 
 	if ([eventName isEqualToString:@"com.shade.domum-hide"]) {
-		[self window].hidden = YES;
-	}
-	else if ([eventName isEqualToString:@"com.shade.domum-show"]) {
-		[self window].hidden = NO;
-	}
-	else if ([eventName isEqualToString:@"com.shade.domum-toggle"]) {
-		if(![self window].hidden){
-			[self window].hidden = YES;
-		}else{
-			[self window].hidden = NO;
+		[DomWindow sharedInstance].hidden = YES;
+	} else if ([eventName isEqualToString:@"com.shade.domum-show"]) {
+		[DomWindow sharedInstance].hidden = NO;
+	} else if ([eventName isEqualToString:@"com.shade.domum-toggle"]) {
+		if (![DomWindow sharedInstance].hidden){
+			[DomWindow sharedInstance].hidden = YES;
+		} else {
+			[DomWindow sharedInstance].hidden = NO;
 		}
-	}
-	else {
+	} else {
 		[event setHandled:NO];
 	}
 }
-
-
 
 @end

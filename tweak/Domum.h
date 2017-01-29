@@ -1,6 +1,4 @@
 #import <UIKit/UIKit.h>
-#import "DomController.h"
-#import "DomWindow.h"
 
 @interface SBUIController
 	+(id)sharedInstance;

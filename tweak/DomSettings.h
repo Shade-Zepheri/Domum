@@ -1,8 +1,11 @@
-@interface DomSettings : NSObject
-@property (nonatomic, assign, readonly) BOOL inLockScreen;
-@property (nonatomic, assign, readonly) CGFloat opacity;
-@property (nonatomic, assign, readonly) CGFloat size;
+@interface DomSettings : NSObject {
+	NSDictionary *_settings;
+}
 
 + (instancetype)sharedSettings;
+- (void)reloadSettings;
+- (BOOL)inLockScreen;
+- (CGFloat)opacity;
+- (CGFloat)size;
 
 @end

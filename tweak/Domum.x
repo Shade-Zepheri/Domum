@@ -1,9 +1,8 @@
 #import "Domum.h"
-#import "DomSettings.h"
 
 @implementation Domum
 
-+ (id)sharedInstance {
++ (instancetype)sharedInstance {
     static dispatch_once_t p = 0;
     __strong static id _sharedObject = nil;
     dispatch_once(&p, ^{
@@ -17,9 +16,9 @@
     _button = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:[[NSBundle bundleWithPath:@"/Library/Application Support/Domum"] pathForResource:@"home" ofType:@"png"]];
     [_button setBackgroundImage:image forState:UIControlStateNormal];
-    _button.frame = CGRectMake(0,0,[DomSettings sharedSettings].size,[DomSettings sharedSettings].size);
+    _button.frame = CGRectMake(0,0,51,51);
     [_button setCenter:CGPointMake([[UIScreen mainScreen] bounds].size.width/2, [[UIScreen mainScreen] bounds].size.height*0.93)];
-    _button.alpha = [DomSettings sharedSettings].opacity;
+    _button.alpha = 1;
     UIPanGestureRecognizer *panRecognizer;
     panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
     																												action:@selector(wasDragged:)];

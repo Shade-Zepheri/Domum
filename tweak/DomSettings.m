@@ -1,17 +1,10 @@
 #import "DomSettings.h"
-
-@interface DomSettings (Private)
-- (void)_prefsChanged;
-@end
-
-static void prefsChanged() {
-  CFPreferencesAppSynchronize(CFSTR("com.shade.domum"));
-  [[DomSettings sharedSettings] _prefsChanged];
-}
+#import "Domum.h"
+#import "DomWindow.h"
 
 @implementation DomSettings
 
-+ (id)sharedSettings {
++ (instancetype)sharedSettings {
     static dispatch_once_t p = 0;
     __strong static id _sharedObject = nil;
     dispatch_once(&p, ^{
@@ -20,24 +13,59 @@ static void prefsChanged() {
     return _sharedObject;
 }
 
-- (id)init {
-  if((self = [super init])) {
-    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
-		                        NULL,
-		                        (CFNotificationCallback)prefsChanged,
-		                        CFSTR("com.shade.domum/ReloadPrefs"),
-		                        NULL,
-		                        CFNotificationSuspensionBehaviorDeliverImmediately);
-    [self _prefsChanged];
+- (instancetype)init {
+  if ((self = [super init])) {
+    [self reloadSettings];
   }
   return self;
 }
 
-- (void)_prefsChanged {
-  CFPreferencesAppSynchronize(CFSTR("com.shade.domum"));
-	_inLockScreen = !CFPreferencesCopyAppValue(CFSTR("inls"), CFSTR("com.shade.domum")) ? YES : [(__bridge id)CFPreferencesCopyAppValue(CFSTR("inls"), CFSTR("com.shade.domum")) boolValue];
-	_opacity = !CFPreferencesCopyAppValue(CFSTR("opacity"), CFSTR("com.shade.domum")) ? 1 : [(__bridge id)CFPreferencesCopyAppValue(CFSTR("opacity"), CFSTR("com.shade.domum")) floatValue];
-  _size = !CFPreferencesCopyAppValue(CFSTR("size"), CFSTR("com.shade.domum")) ? 51 : [(__bridge id)CFPreferencesCopyAppValue(CFSTR("size"), CFSTR("com.shade.domum")) floatValue];
+- (void)reloadSettings {
+  @autoreleasepool {
+    if (_settings) {
+      _settings = nil;
+    }
+    CFPreferencesAppSynchronize(CFSTR("com.shade.domum"));
+    CFStringRef appID = CFSTR("com.shade.domum");
+    CFArrayRef keyList = CFPreferencesCopyKeyList(appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+
+    BOOL failed = NO;
+
+    if (keyList) {
+      _settings = (NSDictionary*)CFBridgingRelease(CFPreferencesCopyMultiple(keyList, appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost));
+      CFRelease(keyList);
+
+      if (!_settings) {
+        failed = YES;
+      }
+    } else {
+      failed = YES;
+    }
+    CFRelease(appID);
+
+    if (failed) {
+      _settings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.shade.domum.plist"];
+    }
+
+    if (!_settings) {
+      HBLogError(@"[ReachApp] could not load settings from CFPreferences or NSDictionary");
+    }
+    [Domum sharedInstance].button.alpha = [self opacity];
+		[Domum sharedInstance].button.frame = CGRectMake(CGRectGetMinX([Domum sharedInstance].button.frame), CGRectGetMinY([Domum sharedInstance].button.frame), [self size], [self size]);
+		[[DomWindow sharedInstance] setShowOnLockScreen:[self inLockScreen]];
+  }
+}
+
+- (BOOL)inLockScreen {
+  return ([_settings objectForKey:@"inLockScreen"] != nil ? [_settings[@"inLockScreen"] boolValue] : YES);
+}
+
+- (CGFloat)opacity {
+  return ([_settings objectForKey:@"opacity"] != nil ? [_settings[@"opacity"] floatValue] : 1);
+}
+
+- (CGFloat)size {
+  return ([_settings objectForKey:@"size"] != nil ? [_settings[@"size"] floatValue] : 51);
 }
 
 @end

@@ -6,4 +6,7 @@
 @end
 
 @interface DomWindow : UIWindow
++ (instancetype)sharedInstance;
+- (instancetype)initWithFrame:(CGRect)frame;
+- (void)setShowOnLockScreen:(BOOL)show;
 @end
