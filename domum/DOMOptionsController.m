@@ -10,8 +10,8 @@
 	return _specifiers;
 }
 
--(void)resetPos{
-	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.shade.domum/ResetPos"), nil, nil, true);
+- (void)resetPosition {
+	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.shade.domum/ResetPosition"), nil, nil, true);
 }
 
 - (void)viewWillAppear:(BOOL)animated {

@@ -14,7 +14,7 @@
 			<key>PostNotification</key>
 			<string>com.shade.domum/ReloadPrefs</string>
 			<key>key</key>
-			<string>inls</string>
+			<string>inLockScreen</string>
 			<key>label</key>
 			<string>SHOW_ON_LOCKSCREEN</string>
 		</dict>
@@ -114,7 +114,7 @@
 			<key>label</key>
 			<string>RESET_DOMUM_POSITION</string>
 			<key>action</key>
-			<string>resetPos</string>
+			<string>resetPosition</string>
 		</dict>
 	</array>
 	<key>title</key>

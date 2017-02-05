@@ -6,6 +6,5 @@
 - (void)reloadSettings;
 - (BOOL)inLockScreen;
 - (CGFloat)opacity;
-- (CGFloat)size;
 
 @end

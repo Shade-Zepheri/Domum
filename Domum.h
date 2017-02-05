@@ -13,6 +13,5 @@
 @end
 
 @interface Domum : UIView <UIGestureRecognizerDelegate>
-+ (instancetype)sharedInstance;
 - (instancetype)initWithFrame:(CGRect)frame;
 @end

@@ -2,20 +2,12 @@
 
 @implementation Domum
 
-+ (instancetype)sharedInstance {
-    static dispatch_once_t p = 0;
-    __strong static id _sharedObject = nil;
-    dispatch_once(&p, ^{
-        _sharedObject = [[self alloc] init];
-    });
-    return _sharedObject;
-}
-
 - (instancetype)initWithFrame:(CGRect)frame {
   self = [super initWithFrame:frame];
   if (self) {
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:[[NSBundle bundleWithPath:@"/Library/Application Support/Domum"] pathForResource:@"home" ofType:@"png"]];
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+    imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self addSubview:imageView];
 
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
@@ -52,25 +44,26 @@
 }
 
 - (void)handlePan:(UIPanGestureRecognizer *)recognizer {
-    UIView *view = (UIView*)recognizer.view;
-		CGPoint translation = [recognizer translationInView:view];
-    CGRect recognizerFrame = recognizer.view.frame;
-    recognizerFrame.origin.x += translation.x;
-    recognizerFrame.origin.y += translation.y;
-		if (CGRectContainsRect(self.superview.bounds, recognizerFrame)) {
-        recognizer.view.frame = recognizerFrame;
-	  } else {
-        if (recognizerFrame.origin.y < self.superview.bounds.origin.y) {
-            recognizerFrame.origin.y = 0;
-        } else if (recognizerFrame.origin.y + recognizerFrame.size.height > self.superview.bounds.size.height) {
-            recognizerFrame.origin.y = self.superview.bounds.size.height - recognizerFrame.size.height;
-        }
-        if (recognizerFrame.origin.x < self.superview.bounds.origin.x) {
-            recognizerFrame.origin.x = 0;
-        } else if (recognizerFrame.origin.x + recognizerFrame.size.width > self.superview.bounds.size.width) {
-            recognizerFrame.origin.x = self.superview.bounds.size.width - recognizerFrame.size.width;
-        }
-    }
-    [recognizer setTranslation:CGPointZero inView:self];
+  UIView *view = (UIView*)recognizer.view;
+  CGPoint translation = [recognizer translationInView:view];
+  CGRect recognizerFrame = recognizer.view.frame;
+  recognizerFrame.origin.x += translation.x;
+  recognizerFrame.origin.y += translation.y;
+  if (CGRectContainsRect(self.superview.bounds, recognizerFrame)) {
+      recognizer.view.frame = recognizerFrame;
+  } else {
+      if (recognizerFrame.origin.y < self.superview.bounds.origin.y) {
+          recognizerFrame.origin.y = 0;
+      } else if (recognizerFrame.origin.y + recognizerFrame.size.height > self.superview.bounds.size.height) {
+          recognizerFrame.origin.y = self.superview.bounds.size.height - recognizerFrame.size.height;
+      }
+      if (recognizerFrame.origin.x < self.superview.bounds.origin.x) {
+          recognizerFrame.origin.x = 0;
+      } else if (recognizerFrame.origin.x + recognizerFrame.size.width > self.superview.bounds.size.width) {
+          recognizerFrame.origin.x = self.superview.bounds.size.width - recognizerFrame.size.width;
+      }
+  }
+  [recognizer setTranslation:CGPointZero inView:self];
 }
+
 @end

@@ -3,12 +3,13 @@
 @implementation DomWindow
 
 + (instancetype)sharedInstance {
-    static dispatch_once_t p = 0;
-    __strong static id _sharedObject = nil;
-    dispatch_once(&p, ^{
-        _sharedObject = [[self alloc] init];
+    static DomWindow *sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[self alloc] initWithFrame:UIScreen.mainScreen.bounds];
+        [sharedInstance createDomum];
     });
-    return _sharedObject;
+    return sharedInstance;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -21,16 +22,18 @@
     return self;
 }
 
+- (void)createDomum {
+  _button = [[Domum alloc] initWithFrame:CGRectMake(0, 0, 48, 48)];
+  [_button setCenter:CGPointMake([[UIScreen mainScreen] bounds].size.width/2, [[UIScreen mainScreen] bounds].size.height*0.93)];
+  [self addSubview:_button];
+}
+
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     UIView *hitTestView = [super hitTest:point withEvent:event];
     if (hitTestView == self) {
         hitTestView = nil;
     }
     return hitTestView;
-}
-
-- (void)setShowOnLockScreen:(BOOL)show {
-  [self _setSecure:show];
 }
 
 @end

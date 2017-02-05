@@ -1,16 +1,15 @@
 #import "DomSettings.h"
-#import "Domum.h"
 #import "DomWindow.h"
 
 @implementation DomSettings
 
 + (instancetype)sharedSettings {
-    static dispatch_once_t p = 0;
-    __strong static id _sharedObject = nil;
-    dispatch_once(&p, ^{
-        _sharedObject = [[self alloc] init];
+    static DomSettings *sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[self alloc] init];
     });
-    return _sharedObject;
+    return sharedInstance;
 }
 
 - (instancetype)init {
@@ -50,9 +49,10 @@
     if (!_settings) {
       HBLogError(@"[ReachApp] could not load settings from CFPreferences or NSDictionary");
     }
-    [Domum sharedInstance].alpha = [self opacity];
-		[Domum sharedInstance].frame = CGRectMake(CGRectGetMinX([Domum sharedInstance].frame), CGRectGetMinY([Domum sharedInstance].frame), [self size], [self size]);
-		[[DomWindow sharedInstance] setShowOnLockScreen:[self inLockScreen]];
+
+    [DomWindow sharedInstance].button.alpha = [self opacity];
+    [DomWindow sharedInstance].button.frame = CGRectMake(CGRectGetMinX([DomWindow sharedInstance].button.frame), CGRectGetMinY([DomWindow sharedInstance].button.frame), [self size], [self size]);
+    [[DomWindow sharedInstance] _setSecure:[self inLockScreen]];
   }
 }
 
