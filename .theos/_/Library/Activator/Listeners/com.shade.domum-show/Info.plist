@@ -1,6 +1,0 @@
-{
-    group = "Domum";
-    title = "Show Domum";
-    description = "Show Domum Button";
-    "compatible-modes" = ("springboard", "lockscreen", "application");
-}
