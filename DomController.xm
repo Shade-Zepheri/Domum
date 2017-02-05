@@ -4,7 +4,7 @@
 @interface DomController : NSObject <LAListener>
 @end
 
-static DOMActivatorListener *sharedInstance;
+static DomController *sharedInstance;
 
 @implementation DomController
 - (void)activator:(LAActivator *)activator receiveEvent:(LAEvent *)event {
@@ -30,7 +30,7 @@ static DOMActivatorListener *sharedInstance;
 @end
 
 %ctor {
-		sharedInstance = [[RAActivatorListener alloc] init];
+		sharedInstance = [[DomController alloc] init];
   	[[%c(LAActivator) sharedInstance] registerListener:sharedInstance forName:@"com.shade.domum-hide"];
 		[[%c(LAActivator) sharedInstance] registerListener:sharedInstance forName:@"com.shade.domum-show"];
 		[[%c(LAActivator) sharedInstance] registerListener:sharedInstance forName:@"com.shade.domum-toggle"];
