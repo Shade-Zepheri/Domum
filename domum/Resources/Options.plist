@@ -14,31 +14,9 @@
 			<key>PostNotification</key>
 			<string>com.shade.domum/ReloadPrefs</string>
 			<key>key</key>
-			<string>inLockScreen</string>
+			<string>ShowOnLockScreen</string>
 			<key>label</key>
 			<string>SHOW_ON_LOCKSCREEN</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>SIZE</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSliderCell</string>
-			<key>default</key>
-			<real>51</real>
-			<key>defaults</key>
-			<string>com.shade.domum</string>
-			<key>PostNotification</key>
-			<string>com.shade.domum/ReloadPrefs</string>
-			<key>key</key>
-			<string>size</string>
-			<key>min</key>
-			<real>20</real>
-			<key>max</key>
-			<real>100</real>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -56,7 +34,7 @@
 			<key>PostNotification</key>
 			<string>com.shade.domum/ReloadPrefs</string>
 			<key>key</key>
-			<string>opacity</string>
+			<string>Opacity</string>
 			<key>min</key>
 			<real>0</real>
 			<key>max</key>
@@ -103,18 +81,6 @@
 			<string>LibActivator</string>
 			<key>activatorListener</key>
 			<string>com.shade.domum-toggle</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSButtonCell</string>
-			<key>label</key>
-			<string>RESET_DOMUM_POSITION</string>
-			<key>action</key>
-			<string>resetPosition</string>
 		</dict>
 	</array>
 	<key>title</key>

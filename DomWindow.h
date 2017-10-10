@@ -1,12 +1,5 @@
-#import <UIKit/UIKit.h>
-#import "Domum.h"
+#import "headers.h"
 
-@interface UIWindow (Private)
-- (void)_setSecure:(BOOL)secure;
-@end
-
-@interface DomWindow : UIWindow
-@property (nonatomic, strong) Domum *button;
-+ (instancetype)sharedInstance;
+@interface DOMWindow : UIWindow
 - (instancetype)initWithFrame:(CGRect)frame;
 @end

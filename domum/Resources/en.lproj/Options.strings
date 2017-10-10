@@ -1,13 +1,20 @@
-{
-  SHOW_ON_LOCKSCREEN = "Show on Lockscreen";
-  ACTIVATOR_GESTURES = "Activator Gestures";
-  SHOW_DOMUM = "Show Domum";
-  HIDE_DOMUM = "Hide Domum";
-  TOGGLE_DOMUM = "Toggle Domum";
-  RESET_DOMUM_POSITION = "Reset Domum Position";
-  OPACITY = "Opacity";
-  CHANGE_COLOR = "Change Color";
-  COLOR = "Color";
-  SIZE = "Size";
-  THEME = "Theme";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>SHOW_ON_LOCKSCREEN</key>
+    <string>Show on Lockscreen</string>
+
+    <key>OPACITY</key>
+    <string>Opacity</string>
+
+    <key>ACTIVATOR_GESTURES</key>
+    <string>Activator Gestures</string>
+    <key>SHOW_DOMUM</key>
+    <string>Show Domum</string>
+    <key>HIDE_DOMUM</key>
+    <string>Hide Domum</string>
+    <key>TOGGLE_DOMUM</key>
+    <string>Toggle Domum</string>
+</dict>
+</plist>

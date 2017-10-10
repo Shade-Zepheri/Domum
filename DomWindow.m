@@ -1,31 +1,17 @@
-#import "DomWindow.h"
+#import "DOMWindow.h"
 
-@implementation DomWindow
-
-+ (instancetype)sharedInstance {
-    static DomWindow *sharedInstance = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] initWithFrame:UIScreen.mainScreen.bounds];
-        [sharedInstance createDomum];
-    });
-    return sharedInstance;
-}
+@implementation DOMWindow
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-			self.windowLevel = UIWindowLevelAlert + 1.0;
-			[self _setSecure:YES];
-      [self makeKeyAndVisible];
-    }
-    return self;
-}
+        self.windowLevel = UIWindowLevelAlert + 1.0;
+        self._secure = YES;
 
-- (void)createDomum {
-  _button = [[Domum alloc] initWithFrame:CGRectMake(0, 0, 48, 48)];
-  [_button setCenter:CGPointMake([[UIScreen mainScreen] bounds].size.width/2, [[UIScreen mainScreen] bounds].size.height*0.93)];
-  [self addSubview:_button];
+        [self makeKeyAndVisible];
+    }
+
+    return self;
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
@@ -33,6 +19,7 @@
     if (hitTestView == self) {
         hitTestView = nil;
     }
+
     return hitTestView;
 }
 

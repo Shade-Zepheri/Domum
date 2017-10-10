@@ -1,10 +1,11 @@
-@interface DomSettings : NSObject {
-	NSDictionary *_settings;
-}
+#import <Cephei/HBPreferences.h>
+
+@interface DOMSettings : NSObject
+@property (nonatomic, readonly) BOOL enabled;
+
+@property (nonatomic, readonly) BOOL showOnLockScreen;
+@property (nonatomic, readonly) CGFloat opacity;
 
 + (instancetype)sharedSettings;
-- (void)reloadSettings;
-- (BOOL)inLockScreen;
-- (CGFloat)opacity;
 
 @end

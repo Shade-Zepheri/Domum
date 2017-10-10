@@ -2,12 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>Filter</key>
-    <dict>
-        <key>Bundles</key>
-        <array>
-            <string>com.apple.springboard</string>
-        </array>
-    </dict>
+    <key>ENABLE</key>
+    <string>Enabled</string>
+
+    <key>OPTIONS</key>
+    <string>Options</string>
+    <key>ABOUT</key>
+    <string>About</string>
 </dict>
 </plist>
