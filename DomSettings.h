@@ -8,4 +8,6 @@
 
 + (instancetype)sharedSettings;
 
+- (void)registerPreferenceChangeBlock:(HBPreferencesChangeCallback)callback;
+
 @end

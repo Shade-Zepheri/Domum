@@ -2,6 +2,9 @@
 #import <UIKit/UIKit.h>
 #import <UIKit/UIImage+Private.h>
 
+#define kScreenWidth CGRectGetMaxX([UIScreen mainScreen].bounds)
+#define kScreenHeight CGRectGetMaxY([UIScreen mainScreen].bounds)
+
 @interface SBUIController ()
 - (BOOL)clickedMenuButton;
 - (BOOL)handleMenuDoubleTap;

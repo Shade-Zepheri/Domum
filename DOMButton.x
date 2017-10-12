@@ -5,10 +5,10 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        UIImage *image = [UIImage imageNamed:@"home" inBundle:[NSBundle bundleWithPath:@"/var/mobile/Library/Domum-Resources.bundle"]];
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-        imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        [self addSubview:imageView];
+        self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+        self.imageView.image = [UIImage imageNamed:@"Home" inBundle:[NSBundle bundleWithPath:@"/var/mobile/Library/Domum-Resources.bundle"]];
+        self.imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [self addSubview:self.imageView];
 
         UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
         panGesture.delegate = self;

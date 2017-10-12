@@ -1,4 +1,5 @@
 #import "DOMWindow.h"
+#import "DOMSettings.h"
 
 @implementation DOMWindow
 
@@ -6,7 +7,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.windowLevel = UIWindowLevelAlert + 1.0;
-        self._secure = YES;
+        self._secure = [DOMSettings sharedSettings].showOnLockScreen;;
 
         [self makeKeyAndVisible];
     }

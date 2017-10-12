@@ -1,4 +1,5 @@
 #import "DOMController.h"
+#import "DOMSettings.h"
 
 @implementation DOMController
 
@@ -14,7 +15,9 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.button = [[DOMButton alloc] initWithFrame:CGRectMake(0, 0, 48, 48)];
+        self.button = [[DOMButton alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+        self.button.center = CGPointMake(kScreenWidth / 2, kScreenHeight - 70);
+        self.button.alpha = [DOMSettings sharedSettings].opacity;
 
         self.window = [[DOMWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
         [self.window addSubview:self.button];

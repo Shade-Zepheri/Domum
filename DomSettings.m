@@ -28,14 +28,13 @@ static NSString *const DOMOpacityKey = @"Opacity";
 
         [_preferences registerBool:&_showOnLockScreen default:YES forKey:DOMShowOnLockScreenKey];
         [_preferences registerFloat:&_opacity default:1 forKey:DOMOpacityKey];
-
-        [_preferences registerPreferenceChangeBlock:^{
-            [[DOMController mainController] updateButtonOpacity:_opacity];
-            [[DOMController mainController] updateWindowVisibility:_showOnLockScreen];
-        }];
     }
 
     return self;
+}
+
+- (void)registerPreferenceChangeBlock:(HBPreferencesChangeCallback)callback {
+    [_preferences registerPreferenceChangeBlock:callback];
 }
 
 @end
