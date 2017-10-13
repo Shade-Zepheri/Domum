@@ -1,4 +1,5 @@
 #import "DOMButton.h"
+#import "DOMSettings.h"
 
 @implementation DOMButton
 
@@ -71,7 +72,7 @@
       case UIGestureRecognizerStateCancelled:
       case UIGestureRecognizerStateFailed:
           [self snapButton];
-          //[self savePosition];
+          [[DOMSettings sharedSettings] saveButtonPosition:recognizer.view.center];
           return;
     }
 
@@ -100,7 +101,6 @@
         case UIGestureRecognizerStateFailed:
             _enableDrag = YES;
             [self snapButton];
-            //[self savePosition];
             break;
     }
 }

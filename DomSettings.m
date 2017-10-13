@@ -37,4 +37,16 @@ static NSString *const DOMOpacityKey = @"Opacity";
     [_preferences registerPreferenceChangeBlock:callback];
 }
 
+- (CGPoint)savedButtonPosition {
+    CGFloat savedX = [_preferences floatForKey:@"DOMButtonPositionX"];
+    CGFloat savedY = [_preferences floatForKey:@"DOMButtonPositionY"];
+
+    return CGPointMake(savedX, savedY);
+}
+
+- (void)saveButtonPosition:(CGPoint)position {
+    [_preferences setFloat:position.x forKey:@"DOMButtonPositionX"];
+    [_preferences setFloat:position.y forKey:@"DOMButtonPositionY"];
+}
+
 @end

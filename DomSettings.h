@@ -10,4 +10,7 @@
 
 - (void)registerPreferenceChangeBlock:(HBPreferencesChangeCallback)callback;
 
+- (CGPoint)savedButtonPosition;
+- (void)saveButtonPosition:(CGPoint)position;
+
 @end
