@@ -21,7 +21,7 @@ static DOMActivatorListener *sharedInstance;
 				if (![DOMController mainController].button.hidden){
 						[DOMController mainController].button.hidden= YES;
 				} else {
-						[DOMController mainController].button.hidden= YES;
+						[DOMController mainController].button.hidden= NO;
 				}
 		} else {
 				[event setHandled:NO];
