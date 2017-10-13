@@ -24,6 +24,10 @@
 			</dict>
 			<dict>
 				<key>cell</key>
+				<string>PSGroupCell</string>
+			</dict>
+			<dict>
+				<key>cell</key>
 				<string>PSLinkCell</string>
 				<key>label</key>
 				<string>OPTIONS</string>

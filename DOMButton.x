@@ -70,9 +70,9 @@
       case UIGestureRecognizerStateEnded:
       case UIGestureRecognizerStateCancelled:
       case UIGestureRecognizerStateFailed:
-          //[self snapButton];
+          [self snapButton];
           //[self savePosition];
-          break;
+          return;
     }
 
     UIView *view = recognizer.view;
@@ -99,10 +99,31 @@
         case UIGestureRecognizerStateCancelled:
         case UIGestureRecognizerStateFailed:
             _enableDrag = YES;
-            //[self snapButton];
+            [self snapButton];
             //[self savePosition];
             break;
     }
+}
+
+- (void)snapButton {
+    CGRect viewFrame = self.frame;
+    CGRect superViewBounds = self.superview.bounds;
+
+    if (viewFrame.origin.y < superViewBounds.origin.y) {
+        viewFrame.origin.y = 0;
+    } else if (CGRectGetMaxY(viewFrame) > superViewBounds.size.height) {
+        viewFrame.origin.y = superViewBounds.size.height - viewFrame.size.height;
+    }
+
+    if (viewFrame.origin.x < superViewBounds.origin.x) {
+        viewFrame.origin.x = 0;
+    } else if (CGRectGetMaxX(viewFrame) > superViewBounds.size.width) {
+        viewFrame.origin.x = superViewBounds.size.width - viewFrame.size.width;
+    }
+
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.frame = viewFrame;
+    } completion:NULL];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
