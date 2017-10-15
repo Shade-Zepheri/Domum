@@ -19,6 +19,11 @@
         scaleGesture.delegate = self;
         [self addGestureRecognizer:scaleGesture];
 
+        UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+        longPressGesture.delegate = self;
+        longPressGesture.minimumPressDuration = 0.7;
+        [self addGestureRecognizer:longPressGesture];
+
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
         tapGesture.numberOfTapsRequired = 1;
         [self addGestureRecognizer:tapGesture];
@@ -31,6 +36,7 @@
         [tapGesture requireGestureRecognizerToFail:doubleTapGesture];
         [tapGesture requireGestureRecognizerToFail:panGesture];
         [tapGesture requireGestureRecognizerToFail:scaleGesture];
+        [tapGesture requireGestureRecognizerToFail:longPressGesture];
 
         _enableDrag = YES;
         self.userInteractionEnabled = YES;
@@ -40,19 +46,27 @@
 }
 
 - (void)handleTap:(UITapGestureRecognizer *)tap {
+    SBUIController *controller = [%c(SBUIController) sharedInstance];
     if ([%c(SBUIController) respondsToSelector:@selector(clickedMenuButton)]) {
-        [[%c(SBUIController) sharedInstance] clickedMenuButton];
+        [controller clickedMenuButton];
     } else {
-        [[%c(SBUIController) sharedInstance] handleHomeButtonSinglePressUp];
+        [controller handleHomeButtonSinglePressUp];
     }
 }
 
 - (void)handleDoubleTap:(UITapGestureRecognizer *)tap {
+    SBUIController *controller = [%c(SBUIController) sharedInstance];
     if ([%c(SBUIController) respondsToSelector:@selector(handleMenuDoubleTap)]) {
-        [[%c(SBUIController) sharedInstance] handleMenuDoubleTap];
+        [controller handleMenuDoubleTap];
     } else {
-        [[%c(SBUIController) sharedInstance] handleHomeButtonDoublePressDown];
+        [controller handleHomeButtonDoublePressDown];
     }
+}
+
+- (void)handleLongPress:(UILongPressGestureRecognizer *)recognizer {
+    SBAssistantController *assistantController = [%c(SBAssistantController) sharedInstance];
+    [assistantController handleSiriButtonDownEventFromSource:1 activationEvent:1];
+    [assistantController handleSiriButtonUpEventFromSource:1];
 }
 
 - (void)handlePan:(UIPanGestureRecognizer *)recognizer {

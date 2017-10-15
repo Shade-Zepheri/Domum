@@ -9,7 +9,7 @@ static DOMActivatorListener *sharedInstance;
 
 @implementation DOMActivatorListener
 - (void)activator:(LAActivator *)activator receiveEvent:(LAEvent *)event {
-		[event setHandled:YES];
+		event.handled = YES;
 
 		NSString *eventName = [activator assignedListenerNameForEvent:event];
 
@@ -24,7 +24,7 @@ static DOMActivatorListener *sharedInstance;
 						[DOMController mainController].button.hidden= NO;
 				}
 		} else {
-				[event setHandled:NO];
+				event.handled = NO;
 		}
 }
 
