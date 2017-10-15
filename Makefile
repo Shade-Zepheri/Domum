@@ -7,7 +7,7 @@ include $(THEOS)/makefiles/common.mk
 TWEAK_NAME = Domum
 Domum_FILES = $(wildcard *.x) $(wildcard *.m)
 Domum_FRAMEWORKS = UIKit
-Domum_EXTRA_FRAMEWORKS = Cephei CepheiPrefs
+Domum_EXTRA_FRAMEWORKS = Cephei
 Domum_CFLAGS = -fobjc-arc
 
 BUNDLE_NAME = Domum-Resources

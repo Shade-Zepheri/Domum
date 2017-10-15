@@ -10,7 +10,10 @@ static inline void initializeTweak(CFNotificationCenterRef center, void *observe
 %hook SBScreenShotter
 - (void)saveScreenshot:(BOOL)save {
     [[DOMController mainController] hideButtonForScreenshot];
-    %orig;
+
+    dispatch_after(0, dispatch_get_main_queue(), ^{
+        %orig;
+    });
 }
 %end
 %end
@@ -20,7 +23,10 @@ static inline void initializeTweak(CFNotificationCenterRef center, void *observe
 %hook SBScreenshotManager
 - (void)saveScreenshotsWithCompletion:(id)completion {
     [[DOMController mainController] hideButtonForScreenshot];
-    %orig;
+
+    dispatch_after(0, dispatch_get_main_queue(), ^{
+        %orig;
+    });
 }
 %end
 %end
