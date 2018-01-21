@@ -1,6 +1,5 @@
 #import "DOMController.h"
 #import "DOMSettings.h"
-#import <version.h>
 
 static inline void initializeTweak(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
     [DOMController mainController];
@@ -32,7 +31,7 @@ static inline void initializeTweak(CFNotificationCenterRef center, void *observe
 %end
 
 %ctor {
-    if (IS_IOS_OR_NEWER(iOS_9_3)) {
+    if (%c(SBScreenshotManager)) {
         %init(iOS93);
     } else {
         %init(iOS9);
