@@ -17,7 +17,7 @@
 		//appearance.statusBarTintColor = [UIColor colorWithWhite:1 alpha:0.7f];
 		self.hb_appearanceSettings = appearance;
 
-		CGRect frame = CGRectMake(0, 0, self.table.bounds.size.width, 127);
+		CGRect frame = CGRectMake(0, 0, CGRectGetWidth(self.table.bounds), 127);
 		UIImage *headerImage = [UIImage imageNamed:@"DomumHeader" inBundle:self.bundle];
 		UIImageView *headerView = [[UIImageView alloc] initWithFrame:frame];
 		headerView.image = headerImage;
@@ -32,7 +32,7 @@
 		[super viewDidLayoutSubviews];
 
 		CGRect wrapperFrame = ((UIView *)self.table.subviews[0]).frame;
-		CGRect frame = CGRectMake(wrapperFrame.origin.x, self.table.tableHeaderView.frame.origin.y, wrapperFrame.size.width, self.table.tableHeaderView.frame.size.height);
+		CGRect frame = CGRectMake(CGRectGetMinX(wrapperFrame), CGRectGetMinY(self.table.tableHeaderView.frame), CGRectGetWidth(wrapperFrame), CGRectGetHeight(self.table.tableHeaderView.frame));
 
 		self.table.tableHeaderView.frame = frame;
 }
