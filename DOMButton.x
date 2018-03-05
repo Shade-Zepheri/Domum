@@ -1,5 +1,8 @@
 #import "DOMButton.h"
 #import "DOMSettings.h"
+#import <SpringBoard/SBAssistantController.h>
+#import <SpringBoard/SBUIController.h>
+#import <UIKit/UIImage+Private.h>
 
 @implementation DOMButton
 
@@ -137,7 +140,7 @@
 
     [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.frame = viewFrame;
-    } completion:NULL];
+    } completion:nil];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {

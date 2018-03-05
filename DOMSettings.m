@@ -1,5 +1,4 @@
 #import "DOMSettings.h"
-#import "DOMController.h"
 
 static NSString *const DOMEnabledKey = @"Enabled";
 

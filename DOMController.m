@@ -1,5 +1,6 @@
 #import "DOMController.h"
 #import "DOMSettings.h"
+#import <UIKit/UIWindow+Internal.h>
 
 @implementation DOMController
 

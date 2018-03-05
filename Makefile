@@ -1,4 +1,4 @@
-export TARGET = iphone:9.2
+export TARGET = iphone:10.1:9.0
 
 INSTALL_TARGET_PROCESSES = SpringBoard
 
@@ -8,7 +8,7 @@ TWEAK_NAME = Domum
 Domum_FILES = $(wildcard *.x) $(wildcard *.m)
 Domum_FRAMEWORKS = UIKit
 Domum_EXTRA_FRAMEWORKS = Cephei
-Domum_CFLAGS = -fobjc-arc
+Domum_CFLAGS = -fobjc-arc -IHeaders
 
 BUNDLE_NAME = Domum-Resources
 Domum-Resources_INSTALL_PATH = /var/mobile/Library/

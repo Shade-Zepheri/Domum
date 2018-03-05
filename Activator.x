@@ -1,5 +1,5 @@
-#import <libactivator/libactivator.h>
 #import "DOMController.h"
+#import <libactivator/libactivator.h>
 
 @interface DOMActivatorListener : NSObject <LAListener>
 
