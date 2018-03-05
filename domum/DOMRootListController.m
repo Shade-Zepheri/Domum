@@ -1,5 +1,6 @@
 #include "DOMRootListController.h"
 #import <CepheiPrefs/HBAppearanceSettings.h>
+#import <UIKit/UIImage+Private.h>
 
 @implementation DOMRootListController
 
@@ -13,8 +14,8 @@
 		HBAppearanceSettings *appearance = [[HBAppearanceSettings alloc] init];
 		appearance.tintColor = GrayColor;
 		appearance.navigationBarTintColor = DarkGrayColor;
-		//appearance.navigationBarTitleColor = [UIColor whiteColor];
-		//appearance.statusBarTintColor = [UIColor colorWithWhite:1 alpha:0.7f];
+		appearance.navigationBarTitleColor = [UIColor whiteColor];
+		appearance.statusBarTintColor = [UIColor colorWithWhite:1 alpha:0.7f];
 		self.hb_appearanceSettings = appearance;
 
 		CGRect frame = CGRectMake(0, 0, CGRectGetWidth(self.table.bounds), 127);
