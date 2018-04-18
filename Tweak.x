@@ -1,12 +1,18 @@
 #import "DOMController.h"
 #import "DOMSettings.h"
 
-static inline void initializeTweak(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+#pragma mark - Setup
+
+void (^initializeTweak)(NSNotification *) = ^(NSNotification *nsNotification) {
+    // Create button
     [DOMController mainController];
-}
+};
+
+#pragma mark - Hooks
 
 %group iOS9
 %hook SBScreenShotter
+
 - (void)saveScreenshot:(BOOL)save {
     [[DOMController mainController] hideButtonForScreenshot];
 
@@ -14,12 +20,14 @@ static inline void initializeTweak(CFNotificationCenterRef center, void *observe
         %orig;
     });
 }
+
 %end
 %end
 
 
 %group iOS93
 %hook SBScreenshotManager
+
 - (void)saveScreenshotsWithCompletion:(id)completion {
     [[DOMController mainController] hideButtonForScreenshot];
 
@@ -27,16 +35,24 @@ static inline void initializeTweak(CFNotificationCenterRef center, void *observe
         %orig;
     });
 }
+
 %end
 %end
 
+#pragma mark - Constructor
+
 %ctor {
+    // Init hooks
     if (%c(SBScreenshotManager)) {
         %init(iOS93);
     } else {
         %init(iOS9);
     }
 
-    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, &initializeTweak, CFSTR("SBSpringBoardDidLaunchNotification"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+    // Create singleton
     [DOMSettings sharedSettings];
+
+    // Create view when SpringBoard loads
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:initializeTweak];
 }
