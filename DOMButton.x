@@ -50,7 +50,7 @@
 
 - (void)handleTap:(UITapGestureRecognizer *)tap {
     SBUIController *controller = [%c(SBUIController) sharedInstance];
-    if ([%c(SBUIController) respondsToSelector:@selector(clickedMenuButton)]) {
+    if ([controller respondsToSelector:@selector(clickedMenuButton)]) {
         [controller clickedMenuButton];
     } else {
         [controller handleHomeButtonSinglePressUp];
@@ -59,7 +59,7 @@
 
 - (void)handleDoubleTap:(UITapGestureRecognizer *)tap {
     SBUIController *controller = [%c(SBUIController) sharedInstance];
-    if ([%c(SBUIController) respondsToSelector:@selector(handleMenuDoubleTap)]) {
+    if ([controller respondsToSelector:@selector(handleMenuDoubleTap)]) {
         [controller handleMenuDoubleTap];
     } else {
         [controller handleHomeButtonDoublePressDown];

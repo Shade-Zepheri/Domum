@@ -23,9 +23,11 @@
         self.window = [[DOMWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
         [self.window addSubview:self.button];
 
-        [[DOMSettings sharedSettings] registerPreferenceChangeBlock:^{
-            [self updateButtonOpacity:[DOMSettings sharedSettings].opacity];
-            [self updateWindowVisibility:[DOMSettings sharedSettings].showOnLockScreen];
+        DOMSettings *settings = [DOMSettings sharedSettings];
+
+        [settings registerPreferenceChangeBlock:^{
+            [self updateButtonOpacity:settings.opacity];
+            [self updateWindowVisibility:settings.showOnLockScreen];
         }];
     }
 
