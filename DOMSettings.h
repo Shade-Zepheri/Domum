@@ -1,3 +1,4 @@
+#import <UIKit/UIKit.h>
 #import <Cephei/HBPreferences.h>
 
 @interface DOMSettings : NSObject
