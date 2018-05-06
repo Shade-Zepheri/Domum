@@ -2,6 +2,7 @@
 #import "DOMSettings.h"
 #import <SpringBoard/SBAssistantController.h>
 #import <SpringBoard/SBUIController.h>
+#import <SpringBoard/SpringBoard+Private.h>
 #import <UIKit/UIImage+Private.h>
 
 @implementation DOMButton
@@ -53,7 +54,7 @@
     if ([controller respondsToSelector:@selector(clickedMenuButton)]) {
         [controller clickedMenuButton];
     } else {
-        [controller handleHomeButtonSinglePressUp];
+        [(SpringBoard *)[UIApplication sharedApplication] _simulateHomeButtonPress];
     }
 }
 
