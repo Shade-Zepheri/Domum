@@ -13,7 +13,7 @@ Domum_CFLAGS = -fobjc-arc -IHeaders
 BUNDLE_NAME = Domum-Resources
 Domum-Resources_INSTALL_PATH = /var/mobile/Library/
 
-SUBPROJECTS = domum
+SUBPROJECTS = Settings
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 include $(THEOS)/makefiles/bundle.mk

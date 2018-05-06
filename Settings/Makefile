@@ -3,7 +3,7 @@ include $(THEOS)/makefiles/common.mk
 BUNDLE_NAME = Domum
 Domum_FILES = $(wildcard *.m)
 Domum_INSTALL_PATH = /Library/PreferenceBundles
-Domum_CFLAGS = -Wno-deprecated-declarations -fobjc-arc
+Domum_CFLAGS = -Wno-deprecated-declarations
 Domum_FRAMEWORKS = UIKit
 Domum_PRIVATE_FRAMEWORKS = Preferences
 Domum_EXTRA_FRAMEWORKS = Cephei CepheiPrefs
